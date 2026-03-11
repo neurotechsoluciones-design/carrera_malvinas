@@ -1,0 +1,860 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Carrera Héroes de Malvinas | 12 de abril de 2026 | San Rafael, Mendoza</title>
+  <meta
+    name="description"
+    content="Carrera Héroes de Malvinas. 12 de abril de 2026 en San Rafael, Mendoza. 1K participativa, 5K y 10K. Evento conmemorativo abierto a toda la comunidad."
+  />
+  <meta
+    name="keywords"
+    content="Carrera Héroes de Malvinas, San Rafael, Mendoza, 1K, 5K, 10K, carrera conmemorativa, Malvinas, inscripción carrera, evento deportivo"
+  />
+  <meta name="author" content="Carrera Héroes de Malvinas" />
+  <meta property="og:title" content="Carrera Héroes de Malvinas" />
+  <meta
+    property="og:description"
+    content="Una jornada deportiva y conmemorativa para homenajear a nuestros héroes y compartir en comunidad una experiencia única en San Rafael."
+  />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="es_AR" />
+  <meta property="og:image" content="assets/og-image.jpg" />
+
+  <!-- Favicons: agregar cuando tengas los archivos en assets/ -->
+  <!-- <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png" /> -->
+  <!-- <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16.png" /> -->
+  <!-- <link rel="apple-touch-icon" href="assets/favicon-180.png" /> -->
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Inter:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Leaflet CSS -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"
+  />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="site-header" id="siteHeader">
+    <div class="container header-inner">
+      <a href="#inicio" class="brand">
+        <span class="brand-kicker">Ejército Argentino</span>
+        <span class="brand-title">Carrera Héroes de Malvinas</span>
+      </a>
+
+      <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">
+        <span></span>
+        <span></span>
+      </button>
+
+      <nav class="main-nav" id="mainNav">
+        <a href="#inicio">Inicio</a>
+        <a href="#sentido">Homenaje</a>
+        <a href="#distancias">Distancias</a>
+        <a href="#inscripcion">Inscripción</a>
+        <a href="#recorridos">Recorridos</a>
+        <a href="#agenda">Agenda</a>
+        <a href="#preguntas">Preguntas</a>
+      </nav>
+
+      <div class="header-actions">
+        <a class="header-phone" href="tel:+5492604087086">+54 9 2604 08-7086</a>
+        <a
+          class="btn btn-primary"
+          href="https://tally.so/r/KYM7K8"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Inscribirme
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero-section" id="inicio">
+      <div class="hero-bg hero-parallax" id="heroParallax"></div>
+      <div class="hero-overlay"></div>
+
+      <div class="container hero-grid">
+        <div class="hero-copy reveal">
+          <div class="eyebrow">
+            Jornada conmemorativa abierta a toda la comunidad
+          </div>
+
+          <h1 class="hero-title">
+            Corré por quienes dejaron
+            <span>su huella en la historia</span>
+          </h1>
+
+          <p class="hero-text">
+            La <strong>Carrera Héroes de Malvinas</strong> es una jornada deportiva y
+            conmemorativa para homenajear a nuestros héroes y compartir en comunidad
+            una experiencia única en <strong>San Rafael, Mendoza</strong>.
+          </p>
+
+          <div class="hero-actions">
+            <a
+              class="btn btn-primary btn-large"
+              href="https://tally.so/r/KYM7K8"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Completar inscripción
+            </a>
+
+            <a class="btn btn-secondary btn-large" href="#recorridos">
+              Ver recorridos
+            </a>
+          </div>
+
+          <div class="hero-inline-meta">
+            <div class="hero-inline-item">
+              <span>Fecha</span>
+              <strong>12 de abril de 2026</strong>
+            </div>
+            <div class="hero-inline-item">
+              <span>Lugar</span>
+              <strong>San Rafael, Mendoza</strong>
+            </div>
+            <div class="hero-inline-item">
+              <span>Distancias</span>
+              <strong>1K | 5K | 10K</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-visual-panel reveal">
+          <div class="hero-main-image">
+            <img
+              src="assets/hero-main.jpg"
+              alt="Imagen principal de la carrera Héroes de Malvinas"
+            />
+            <div class="hero-main-image-overlay">
+              <span class="visual-tag">Imagen principal</span>
+              <h2>Espacio listo para la foto hero definitiva del evento</h2>
+              <p>
+                Después vamos a reemplazar esta imagen por una versión más alineada con
+                San Rafael, Malvinas y la identidad final del evento.
+              </p>
+            </div>
+          </div>
+
+          <div class="hero-bottom-strip">
+            <div class="hero-countdown-block">
+              <span class="card-kicker">Cuenta regresiva</span>
+
+              <div class="countdown-grid" id="countdown">
+                <div class="count-box">
+                  <span id="days">00</span>
+                  <small>Días</small>
+                </div>
+                <div class="count-box">
+                  <span id="hours">00</span>
+                  <small>Horas</small>
+                </div>
+                <div class="count-box">
+                  <span id="minutes">00</span>
+                  <small>Min</small>
+                </div>
+                <div class="count-box">
+                  <span id="seconds">00</span>
+                  <small>Seg</small>
+                </div>
+              </div>
+            </div>
+
+            <div class="hero-contact-block">
+              <span class="card-kicker">Contacto directo</span>
+              <div class="hero-contact-links">
+                <a
+                  class="mini-action"
+                  href="https://wa.me/5492604087086"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  WhatsApp
+                </a>
+                <a class="mini-action" href="tel:+5492604087086">
+                  +54 9 2604 08-7086
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="quick-info quick-info-band reveal">
+      <div class="container quick-info-band-inner">
+        <article class="quick-stat">
+          <span class="quick-stat-label">Evento</span>
+          <strong class="quick-stat-value">Conmemorativo y deportivo</strong>
+        </article>
+
+        <article class="quick-stat">
+          <span class="quick-stat-label">Modalidades</span>
+          <strong class="quick-stat-value">1K participativa · 5K · 10K</strong>
+        </article>
+
+        <article class="quick-stat">
+          <span class="quick-stat-label">Inscripción</span>
+          <strong class="quick-stat-value">Formulario online + WhatsApp</strong>
+        </article>
+
+        <article class="quick-stat quick-stat-cta">
+          <a
+            class="btn btn-dark-line"
+            href="https://tally.so/r/KYM7K8"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Ir al formulario
+          </a>
+        </article>
+      </div>
+    </section>
+
+    <section class="story-section light-section" id="sentido">
+      <div class="container story-grid">
+        <div class="story-main panel-light reveal">
+          <span class="section-kicker dark-kicker">Por qué corremos</span>
+          <h2 class="section-title dark-title">
+            Una carrera que no solo convoca.
+            <span>También representa.</span>
+          </h2>
+          <p class="section-text dark-text">
+            Esta jornada nace para homenajear a los Veteranos y a los Caídos en la
+            Guerra de Malvinas desde una propuesta que une <strong>memoria</strong>,
+            <strong>comunidad</strong> y <strong>participación activa</strong>.
+          </p>
+          <p class="section-text dark-text">
+            No es solo una carrera. Es un espacio para recordar, acompañar y compartir
+            un evento abierto a toda la comunidad, con una propuesta accesible para
+            familias y una experiencia deportiva para quienes buscan el desafío de la
+            competencia.
+          </p>
+        </div>
+
+        <div class="story-side">
+          <article class="mini-panel panel-light reveal">
+            <span class="mini-panel-title">Memoria</span>
+            <p>
+              La landing debe transmitir homenaje y respeto sin caer en rigidez ni
+              solemnidad excesiva.
+            </p>
+          </article>
+
+          <article class="mini-panel panel-light reveal">
+            <span class="mini-panel-title">Comunidad</span>
+            <p>
+              La 1K participativa abre el evento a familias, instituciones y vecinos.
+            </p>
+          </article>
+
+          <article class="mini-panel panel-light reveal">
+            <span class="mini-panel-title">Desafío</span>
+            <p>
+              Las modalidades de 5K y 10K sostienen el pulso deportivo y la convocatoria
+              de corredores.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         SECCIÓN DISTANCIAS — Cards con glassmorphism e imagen de fondo
+    ═══════════════════════════════════════════════════════════ -->
+    <section class="distances-section light-section" id="distancias">
+      <div class="container">
+        <div class="section-head reveal">
+          <div>
+            <span class="section-kicker dark-kicker">Modalidades</span>
+            <h2 class="section-title dark-title">Elegí tu distancia</h2>
+          </div>
+
+          <a
+            class="btn btn-secondary-light"
+            href="https://tally.so/r/KYM7K8"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Ir al formulario
+          </a>
+        </div>
+
+        <div class="distance-grid">
+
+          <!-- Card 1K -->
+          <article class="distance-card-glass reveal" data-distance="1k">
+            <div class="dcg-bg" style="background-image: url('assets/distance-bg-1k.jpg')"></div>
+            <div class="dcg-overlay"></div>
+            <div class="dcg-content">
+              <div class="dcg-top">
+                <span class="dcg-badge">Comunidad</span>
+                <strong class="dcg-price">$40.000</strong>
+              </div>
+              <h3 class="dcg-title">1K participativa</h3>
+              <p class="dcg-desc">
+                Pensada para familias, instituciones y participantes que quieran sumarse
+                desde una experiencia inclusiva, recreativa y conmemorativa.
+              </p>
+              <ul class="dcg-list">
+                <li>Modalidad recreativa / caminata</li>
+                <li>Incluye kit del evento</li>
+                <li>Sin dorsal de competencia</li>
+                <li>Pago total o en dos cuotas</li>
+              </ul>
+              <a
+                class="dcg-btn"
+                href="https://tally.so/r/KYM7K8"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Inscribirme en 1K
+              </a>
+            </div>
+          </article>
+
+          <!-- Card 5K (destacada) -->
+          <article class="distance-card-glass dcg-featured reveal" data-distance="5k">
+            <div class="dcg-bg" style="background-image: url('assets/distance-bg-5k.jpg')"></div>
+            <div class="dcg-overlay"></div>
+            <div class="dcg-content">
+              <div class="dcg-top">
+                <span class="dcg-badge dcg-badge-accent">Intermedia</span>
+                <strong class="dcg-price dcg-price-accent">$50.000</strong>
+              </div>
+              <h3 class="dcg-title">5K</h3>
+              <p class="dcg-desc">
+                La opción ideal para quienes buscan un desafío accesible con una experiencia
+                más activa y deportiva dentro del espíritu del evento.
+              </p>
+              <ul class="dcg-list">
+                <li>Incluye dorsal de competencia</li>
+                <li>Incluye kit del corredor</li>
+                <li>Pago total o en dos cuotas</li>
+                <li>Promo equipos de 10 corredores: 10% off</li>
+              </ul>
+              <a
+                class="dcg-btn dcg-btn-accent"
+                href="https://tally.so/r/KYM7K8"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Inscribirme en 5K
+              </a>
+            </div>
+          </article>
+
+          <!-- Card 10K -->
+          <article class="distance-card-glass reveal" data-distance="10k">
+            <div class="dcg-bg" style="background-image: url('assets/distance-bg-10k.jpg')"></div>
+            <div class="dcg-overlay"></div>
+            <div class="dcg-content">
+              <div class="dcg-top">
+                <span class="dcg-badge">Desafío</span>
+                <strong class="dcg-price">$50.000</strong>
+              </div>
+              <h3 class="dcg-title">10K</h3>
+              <p class="dcg-desc">
+                La distancia competitiva para corredores que buscan mayor exigencia, ritmo
+                y una experiencia completa de carrera.
+              </p>
+              <ul class="dcg-list">
+                <li>Incluye dorsal de competencia</li>
+                <li>Incluye kit del corredor</li>
+                <li>Pago total o en dos cuotas</li>
+                <li>Promo equipos de 10 corredores: 10% off</li>
+              </ul>
+              <a
+                class="dcg-btn"
+                href="https://tally.so/r/KYM7K8"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Inscribirme en 10K
+              </a>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <section class="registration-section dark-section" id="inscripcion">
+      <div class="container registration-grid">
+        <div class="panel-dark registration-main reveal">
+          <span class="section-kicker">Inscripción y pagos</span>
+          <h2 class="section-title">Todo lo necesario para anotarte</h2>
+
+          <div class="registration-block">
+            <h3>5K y 10K</h3>
+            <p><strong>Valor:</strong> $50.000</p>
+            <p><strong>Pago total:</strong> $50.000 al momento de inscribirte.</p>
+            <p>
+              <strong>Pago en dos cuotas:</strong> $25.000 ahora para reservar tu lugar
+              y $25.000 restantes en efectivo el día de la acreditación y retiro del kit.
+            </p>
+          </div>
+
+          <div class="registration-block">
+            <h3>1K recreativa / caminata</h3>
+            <p><strong>Valor:</strong> $40.000</p>
+            <p><strong>Pago total:</strong> $40.000 al momento de inscribirte.</p>
+            <p>
+              <strong>Pago en dos cuotas:</strong> $20.000 ahora para reservar tu lugar
+              y $20.000 restantes en efectivo el día de la acreditación.
+            </p>
+          </div>
+
+          <div class="registration-block">
+            <h3>Promoción equipos</h3>
+            <p>
+              Armá tu equipo de <strong>10 corredores</strong> y obtené un
+              <strong>10% de descuento</strong>.
+            </p>
+            <p>
+              Cada integrante del equipo paga <strong>$45.000</strong> en lugar de
+              $50.000.
+            </p>
+          </div>
+
+          <div class="registration-actions">
+            <a
+              class="btn btn-primary btn-large"
+              href="https://tally.so/r/KYM7K8"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Completar formulario de inscripción
+            </a>
+
+            <a
+              class="btn btn-secondary btn-large"
+              href="https://wa.me/5492604087086"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Consultar por WhatsApp
+            </a>
+          </div>
+        </div>
+
+        <div class="registration-side">
+          <div class="panel-dark side-card reveal">
+            <span class="side-title">Kit del corredor</span>
+            <ul class="clean-list">
+              <li>Remera oficial del evento, según disponibilidad de inscripciones confirmadas</li>
+              <li>Dorsal de competencia para 5K y 10K</li>
+              <li>Regalos de sponsors</li>
+              <li>Medalla finisher al completar la carrera</li>
+              <li>Cobertura de seguro durante la competencia</li>
+            </ul>
+          </div>
+
+          <div class="panel-dark side-card reveal">
+            <span class="side-title">Aclaración importante</span>
+            <p>
+              La remera oficial se entregará según orden de inscripción confirmada. Una
+              vez alcanzado el cupo previsto de producción, los participantes podrán
+              seguir inscribiéndose y participar de la carrera, pero sin garantía de
+              disponibilidad de remera.
+            </p>
+          </div>
+
+          <div class="panel-dark side-card reveal">
+            <span class="side-title">Confirmación de inscripción</span>
+            <p>
+              La inscripción quedará confirmada únicamente una vez realizado el pago de
+              la primera cuota o del pago total.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         SECCIÓN RECORRIDOS — Mapa interactivo Leaflet
+    ═══════════════════════════════════════════════════════════ -->
+    <section class="routes-section light-section" id="recorridos">
+      <div class="container">
+        <div class="section-head reveal">
+          <div>
+            <span class="section-kicker dark-kicker">Recorridos y descargas</span>
+            <h2 class="section-title dark-title">Circuitos del evento</h2>
+          </div>
+        </div>
+
+        <div class="routes-grid">
+          <!-- Panel izquierdo: info + tabs -->
+          <div class="panel-light route-controls reveal">
+            <div class="route-tabs" role="tablist" aria-label="Recorridos">
+              <button class="route-tab active" data-route="1k" type="button">1K</button>
+              <button class="route-tab" data-route="5k" type="button">5K</button>
+              <button class="route-tab" data-route="10k" type="button">10K</button>
+            </div>
+
+            <div class="route-info">
+              <h3 id="routeTitle" class="dark-title">Recorrido 1K</h3>
+              <p id="routeDescription" class="dark-text">
+                Circuito participativo y accesible, pensado para acompañar el espíritu
+                comunitario del evento.
+              </p>
+
+              <div class="route-meta">
+                <div class="route-meta-card">
+                  <span>Superficie</span>
+                  <strong id="routeSurface">Urbano</strong>
+                </div>
+                <div class="route-meta-card">
+                  <span>Largada / llegada</span>
+                  <strong id="routeStart">Zona central del evento</strong>
+                </div>
+                <div class="route-meta-card route-stats-card">
+                  <span>Estadísticas del recorrido</span>
+                  <div class="route-stats-row">
+                    <div class="route-stat-item">
+                      <strong id="routeDistance">1.0 km</strong>
+                      <small>Distancia</small>
+                    </div>
+                    <div class="route-stat-item">
+                      <strong id="routeElevUp">+18 m</strong>
+                      <small>Desnivel +</small>
+                    </div>
+                    <div class="route-stat-item">
+                      <strong id="routeElevDown">-18 m</strong>
+                      <small>Desnivel −</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Botón descarga GPX -->
+              <a
+                class="download-button"
+                id="downloadGpx"
+                href="assets/gpx/carrera-malvinas-1k.gpx"
+                download
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                  <polyline points="7 10 12 15 17 10"/>
+                  <line x1="12" y1="15" x2="12" y2="3"/>
+                </svg>
+                Descargar GPX
+              </a>
+            </div>
+          </div>
+
+          <!-- Panel derecho: mapa Leaflet + perfil de elevación -->
+          <div class="panel-dark route-map-card reveal">
+            <!-- Mapa -->
+            <div class="route-map-leaflet-wrap">
+              <div id="routeMap" class="route-map-leaflet"></div>
+              <!-- Botón fullscreen -->
+              <button class="map-fullscreen-btn" id="mapFullscreenBtn" title="Pantalla completa" type="button">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="15 3 21 3 21 9"/>
+                  <polyline points="9 21 3 21 3 15"/>
+                  <line x1="21" y1="3" x2="14" y2="10"/>
+                  <line x1="3" y1="21" x2="10" y2="14"/>
+                </svg>
+              </button>
+            </div>
+
+            <!-- Perfil de elevación -->
+            <div class="elevation-wrap">
+              <span class="elevation-label">Perfil de elevación</span>
+              <div class="elevation-chart-container">
+                <canvas id="elevationChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Modal fullscreen del mapa -->
+    <div class="map-modal" id="mapModal" role="dialog" aria-label="Mapa en pantalla completa">
+      <button class="map-modal-close" id="mapModalClose" type="button" title="Cerrar">✕</button>
+      <div id="mapModalContainer" class="map-modal-container"></div>
+    </div>
+
+    <section class="agenda-section light-section" id="agenda">
+      <div class="container agenda-grid">
+        <div class="panel-light agenda-main reveal">
+          <span class="section-kicker dark-kicker">Agenda del evento</span>
+          <h2 class="section-title dark-title">Cronograma estimado</h2>
+
+          <div class="timeline">
+            <article class="timeline-item">
+              <span class="timeline-hour">07:30</span>
+              <div>
+                <h3 class="dark-title small-title">Acreditación y retiro de kit</h3>
+                <p class="dark-text">
+                  Últimos pagos en efectivo para quienes eligieron modalidad en dos cuotas.
+                </p>
+              </div>
+            </article>
+
+            <article class="timeline-item">
+              <span class="timeline-hour">08:30</span>
+              <div>
+                <h3 class="dark-title small-title">Ingreso a zona de largada</h3>
+                <p class="dark-text">Organización de participantes y chequeo general.</p>
+              </div>
+            </article>
+
+            <article class="timeline-item">
+              <span class="timeline-hour">09:00</span>
+              <div>
+                <h3 class="dark-title small-title">Inicio de actividades</h3>
+                <p class="dark-text">Mensaje institucional y apertura del evento.</p>
+              </div>
+            </article>
+
+            <article class="timeline-item">
+              <span class="timeline-hour">09:15</span>
+              <div>
+                <h3 class="dark-title small-title">Largada 10K y 5K</h3>
+                <p class="dark-text">Horarios sujetos a confirmación final del evento.</p>
+              </div>
+            </article>
+
+            <article class="timeline-item">
+              <span class="timeline-hour">10:15</span>
+              <div>
+                <h3 class="dark-title small-title">Largada 1K participativa</h3>
+                <p class="dark-text">Espacio familiar y comunitario.</p>
+              </div>
+            </article>
+
+            <article class="timeline-item">
+              <span class="timeline-hour">11:00</span>
+              <div>
+                <h3 class="dark-title small-title">Cierre y reconocimientos</h3>
+                <p class="dark-text">Entrega de medallas finisher y agradecimientos.</p>
+              </div>
+            </article>
+          </div>
+        </div>
+
+        <div class="agenda-side">
+          <div class="panel-light side-card reveal">
+            <span class="side-title">Ubicación</span>
+            <p class="dark-text">San Rafael, Mendoza</p>
+            <p class="dark-text">Av. El Libertador 910, Oficina 1, San Rafael, Mendoza</p>
+          </div>
+
+          <div class="panel-light side-card reveal">
+            <span class="side-title">Contacto directo</span>
+            <p class="dark-text">
+              <a href="tel:+5492604087086">+54 9 2604 08-7086</a>
+            </p>
+            <p class="dark-text">
+              <a
+                href="https://wa.me/5492604087086"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Escribir por WhatsApp
+              </a>
+            </p>
+          </div>
+
+          <div class="panel-light side-card reveal">
+            <span class="side-title">Respaldo institucional</span>
+            <p class="dark-text">
+              Bloque preparado para integrar organizadores, apoyos confirmados y logos
+              institucionales sin sobrecargar la identidad visual.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="faq-section light-section" id="preguntas">
+      <div class="container">
+        <div class="section-head reveal">
+          <div>
+            <span class="section-kicker dark-kicker">Preguntas frecuentes</span>
+            <h2 class="section-title dark-title">Todo lo esencial, claro y visible</h2>
+          </div>
+        </div>
+
+        <div class="faq-list">
+          <article class="faq-item panel-light reveal">
+            <button class="faq-question" type="button">
+              ¿Cómo me inscribo?
+              <span>+</span>
+            </button>
+            <div class="faq-answer">
+              <p class="dark-text">
+                Desde el botón de inscripción que dirige al formulario oficial. La
+                inscripción queda confirmada una vez realizado el pago de la primera cuota
+                o del pago total.
+              </p>
+            </div>
+          </article>
+
+          <article class="faq-item panel-light reveal">
+            <button class="faq-question" type="button">
+              ¿La 1K incluye dorsal?
+              <span>+</span>
+            </button>
+            <div class="faq-answer">
+              <p class="dark-text">
+                No. La 1K es participativa y recreativa. Incluye kit del evento, pero sin
+                dorsal de competencia.
+              </p>
+            </div>
+          </article>
+
+          <article class="faq-item panel-light reveal">
+            <button class="faq-question" type="button">
+              ¿Puedo pagar en dos cuotas?
+              <span>+</span>
+            </button>
+            <div class="faq-answer">
+              <p class="dark-text">
+                Sí. En 5K y 10K podés abonar $25.000 ahora y $25.000 en efectivo el día
+                de acreditación. En 1K podés abonar $20.000 ahora y $20.000 en efectivo
+                el día de acreditación.
+              </p>
+            </div>
+          </article>
+
+          <article class="faq-item panel-light reveal">
+            <button class="faq-question" type="button">
+              ¿La remera está garantizada?
+              <span>+</span>
+            </button>
+            <div class="faq-answer">
+              <p class="dark-text">
+                La remera oficial se entrega según orden de inscripción confirmada y hasta
+                agotar el cupo previsto para producción.
+              </p>
+            </div>
+          </article>
+
+          <article class="faq-item panel-light reveal">
+            <button class="faq-question" type="button">
+              ¿Puedo descargar el recorrido en mi Garmin o reloj GPS?
+              <span>+</span>
+            </button>
+            <div class="faq-answer">
+              <p class="dark-text">
+                Sí. En la sección "Recorridos" encontrás el botón "Descargar GPX" para
+                cada distancia. Podés importarlo a Garmin, Suunto, Polar o cualquier
+                dispositivo compatible con el formato GPX.
+              </p>
+            </div>
+          </article>
+
+          <article class="faq-item panel-light reveal">
+            <button class="faq-question" type="button">
+              ¿Dónde consulto dudas?
+              <span>+</span>
+            </button>
+            <div class="faq-answer">
+              <p class="dark-text">
+                Podés comunicarte por WhatsApp o teléfono al número oficial que figura en
+                esta página.
+              </p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="final-cta-section dark-section">
+      <div class="container">
+        <div class="panel-dark final-cta reveal">
+          <div class="final-cta-copy">
+            <span class="section-kicker">Cierre</span>
+            <h2 class="section-title">Corré, participá y sumate al homenaje.</h2>
+            <p class="section-text">
+              Una propuesta abierta a toda la comunidad para vivir una jornada deportiva y
+              conmemorativa en San Rafael.
+            </p>
+          </div>
+
+          <div class="final-cta-actions">
+            <a
+              class="btn btn-primary btn-large"
+              href="https://tally.so/r/KYM7K8"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Inscribirme ahora
+            </a>
+            <a
+              class="btn btn-secondary btn-large"
+              href="https://wa.me/5492604087086"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Consultar por WhatsApp
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer dark-section">
+    <div class="container footer-inner">
+      <div>
+        <strong>Carrera Héroes de Malvinas</strong>
+        <p>12 de abril de 2026 · San Rafael, Mendoza</p>
+      </div>
+
+      <div class="footer-links">
+        <a href="tel:+5492604087086">+54 9 2604 08-7086</a>
+        <a
+          href="https://wa.me/5492604087086"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          WhatsApp
+        </a>
+        <a
+          href="https://tally.so/r/KYM7K8"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Formulario de inscripción
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <a
+    class="floating-whatsapp"
+    href="https://wa.me/5492604087086"
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="Escribir por WhatsApp"
+  >
+    <span class="floating-whatsapp-label">WhatsApp</span>
+  </a>
+
+  <!-- Leaflet JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+  <!-- Chart.js para perfil de elevación -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+
+  <script src="script.js"></script>
+</body>
+</html>
