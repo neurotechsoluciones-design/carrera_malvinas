@@ -1,33 +1,87 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<gpx xmlns:gpxdata="http://www.cluetrust.com/XML/GPXDATA/1/0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.topografix.com/GPX/1/1" version="1.1" creator="http://ridewithgps.com/" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd http://www.cluetrust.com/XML/GPXDATA/1/0 http://www.cluetrust.com/Schemas/gpxdata10.xsd">
-  <metadata>
-    <name>Gran Fondo 7 Lagos 2025</name>
-    <link href="https://ridewithgps.com/routes/42287146">
-      <text>Gran Fondo 7 Lagos 2025</text>
-    </link>
-    <time>2023-03-20T15:04:06Z</time>
-  </metadata>
-  <rte>
-    <name>Gran Fondo 7 Lagos 2025</name>
-    <rtept lat="-40.762479" lon="-71.64252">
-      <name>Start</name>
-      <cmt>Start of route</cmt>
-    </rtept>
-    <rtept lat="-40.76196" lon="-71.64736">
-      <name>Right</name>
-      <cmt>Gira a la derecha hacia Av. Siete Lagos/​RN40</cmt>
-    </rtept>
-    <rtept lat="-40.69237" lon="-71.69709">
-      <name>Right</name>
-      <cmt>Gira a la derecha para continuar en RN40</cmt>
-    </rtept>
-    <rtept lat="-40.16153" lon="-71.35768">
-      <name>Left</name>
-      <cmt>Gira a la izquierda hacia Av. Costanera</cmt>
-    </rtept>
-    <rtept lat="-40.16008" lon="-71.35999">
-      <name>End</name>
-      <cmt>End of route</cmt>
-    </rtept>
-  </rte>
+<?xml version="1.0"?>
+<gpx version="1.1" creator="GDAL 3.6.3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ogr="http://osgeo.org/gdal" xmlns="http://www.topografix.com/GPX/1/1" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
+<metadata><bounds minlat="-34.617448162820402" minlon="-68.356176480099904" maxlat="-34.616001404327498" maxlon="-68.355124165912201"/></metadata>              
+<trk>
+  <name>carrera_malvina</name>
+  <trkseg>
+    <trkpt lat="-34.616037715096901" lon="-68.355899235130096">
+        <ele>0.0</ele>
+    </trkpt>
+    <trkpt lat="-34.616048400259402" lon="-68.355944484602901">
+        <ele>0.0</ele>
+    </trkpt>
+    <trkpt lat="-34.616160596151701" lon="-68.356082245318504">
+        <ele>0.0</ele>
+    </trkpt>
+    <trkpt lat="-34.6163066737574" lon="-68.356176480099904">
+        <ele>0.0</ele>
+    </trkpt>
+    <trkpt lat="-34.616506385638203" lon="-68.356160777829899">
+        <ele>0.0</ele>
+    </trkpt>
+    <trkpt lat="-34.6167437140438" lon="-68.356108258749899">
+        <ele>0.0</ele>
+    </trkpt>
+    <trkpt lat="-34.616999869946099" lon="-68.356046374523999">
+        <ele>0.0</ele>
+    </trkpt>
+    <trkpt lat="-34.617147561529997" lon="-68.355999706590794">
+        <ele>0.0</ele>
+    </trkpt>
+    <trkpt lat="-34.617273912732202" lon="-68.355948789832993">
+        <ele>0.0</ele>
+    </trkpt>
+    <trkpt lat="-34.617342889175198" lon="-68.355889971839204">
+        <ele>0.0</ele>
+    </trkpt>
+    <trkpt lat="-34.617394630963901" lon="-68.355779033768101">
+        <ele>0.0</ele>
+    </trkpt>
+    <trkpt lat="-34.617448162820402" lon="-68.3556648258796">
+        <ele>0.0</ele>
+    </trkpt>
+    <trkpt lat="-34.617441097930403" lon="-68.355514167720102">
+        <ele>0.0</ele>
+    </trkpt>
+    <trkpt lat="-34.617419590292101" lon="-68.355380328635505">
+        <ele>0.0</ele>
+    </trkpt>
+    <trkpt lat="-34.617343056795399" lon="-68.355261821600195">
+        <ele>0.0</ele>
+    </trkpt>
+    <trkpt lat="-34.617284278682298" lon="-68.355209775224395">
+        <ele>0.0</ele>
+    </trkpt>
+    <trkpt lat="-34.6171864715784" lon="-68.355159246142094">
+        <ele>0.0</ele>
+    </trkpt>
+    <trkpt lat="-34.6171059142969" lon="-68.355124165912201">
+        <ele>0.0</ele>
+    </trkpt>
+    <trkpt lat="-34.616871502747003" lon="-68.355173807917893">
+        <ele>0.0</ele>
+    </trkpt>
+    <trkpt lat="-34.616311896048899" lon="-68.355309630768502">
+        <ele>0.0</ele>
+    </trkpt>
+    <trkpt lat="-34.616150820663897" lon="-68.355382146979593">
+        <ele>0.0</ele>
+    </trkpt>
+    <trkpt lat="-34.616060391815303" lon="-68.355446835515906">
+        <ele>0.0</ele>
+    </trkpt>
+    <trkpt lat="-34.616016244810403" lon="-68.355542367361394">
+        <ele>0.0</ele>
+    </trkpt>
+    <trkpt lat="-34.616001404327498" lon="-68.355683371493001">
+        <ele>0.0</ele>
+    </trkpt>
+    <trkpt lat="-34.616001686753798" lon="-68.355795784851296">
+        <ele>0.0</ele>
+    </trkpt>
+    <trkpt lat="-34.616037715096901" lon="-68.355899235130096">
+        <ele>0.0</ele>
+    </trkpt>
+  </trkseg>
+</trk>
 </gpx>
