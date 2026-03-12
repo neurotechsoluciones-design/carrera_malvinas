@@ -603,67 +603,80 @@ button { cursor:pointer; }
 .small-title   { font-size:1.8rem; }
 
 /* ─── AUSPICIANTES ─── */
-.sponsors-section { background: var(--bg-light); }
+.sponsors-section { padding-top: 80px; padding-bottom: 80px; }
 
-.sponsors-head { text-align:center; margin-bottom:48px; }
-
-.sponsor-tier { margin-bottom:44px; }
+.sponsors-head { text-align: center; margin-bottom: 44px; }
 
 .sponsor-tier-label {
-  text-align:center; display:block;
-  font-size:0.68rem; letter-spacing:0.24em; text-transform:uppercase;
-  color:#2d6c8f; margin-bottom:22px;
+  text-align: center; display: block;
+  font-size: 0.66rem; letter-spacing: 0.24em; text-transform: uppercase;
+  color: #2d6c8f; margin-bottom: 18px;
 }
 
-/* Organizador principal */
-.sponsor-tier-main .sponsor-main-logo {
-  display:flex; justify-content:center; align-items:center;
-  padding:36px 48px; border-radius:28px;
-  background:rgba(255,255,255,0.92); border:1px solid var(--line-light);
+/* Fila organizador principal */
+.sponsor-main-row { margin-bottom: 40px; }
+
+.sponsor-main-card {
+  display: flex; justify-content: center; align-items: center;
+  padding: 32px 40px; border-radius: 22px;
+  background: rgba(255,255,255,0.92); border: 1px solid var(--line-light);
   box-shadow: var(--shadow-soft);
-  max-width:380px; margin:0 auto;
+  max-width: 320px; margin: 0 auto;
   transition: transform var(--transition), box-shadow var(--transition);
 }
-.sponsor-tier-main .sponsor-main-logo:hover {
-  transform:translateY(-3px); box-shadow:0 28px 60px rgba(17,24,39,0.12);
+.sponsor-main-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 24px 56px rgba(17,24,39,0.12);
 }
-.sponsor-tier-main .sponsor-main-logo img {
-  max-height:120px; max-width:280px; object-fit:contain; width:auto;
+.sponsor-main-card img {
+  max-height: 100px; max-width: 240px;
+  width: auto; height: auto; object-fit: contain;
 }
 
-/* Logos secundarios */
-.sponsor-logos-row {
-  display:flex; flex-wrap:wrap; justify-content:center; gap:20px;
+/* Grilla de 6 auspiciantes */
+.sponsor-secondary-row { margin-bottom: 36px; }
+
+.sponsor-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 14px;
 }
-.sponsor-logo-card {
-  display:flex; flex-direction:column; align-items:center; gap:12px;
-  padding:28px 36px; border-radius:22px;
-  background:rgba(255,255,255,0.90); border:1px solid var(--line-light);
-  box-shadow:var(--shadow-soft); min-width:160px; max-width:220px; flex:1;
+
+.sponsor-card {
+  display: flex; align-items: center; justify-content: center;
+  padding: 22px 18px; border-radius: 16px;
+  background: rgba(255,255,255,0.90); border: 1px solid var(--line-light);
+  box-shadow: 0 4px 18px rgba(17,24,39,0.06);
+  min-height: 90px;
   transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
 }
-.sponsor-logo-card:hover {
-  transform:translateY(-4px); box-shadow:0 24px 50px rgba(17,24,39,0.12);
-  border-color:rgba(77,189,245,0.20);
+.sponsor-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(17,24,39,0.10);
+  border-color: rgba(77,189,245,0.18);
 }
-.sponsor-logo-card img {
-  max-height:72px; max-width:140px; object-fit:contain; width:auto;
-  filter:grayscale(0.15) contrast(1.05);
+.sponsor-card img {
+  max-height: 56px; max-width: 110px;
+  width: auto; height: auto; object-fit: contain;
+  filter: grayscale(0.1);
   transition: filter var(--transition);
 }
-.sponsor-logo-card:hover img { filter:grayscale(0) contrast(1.08); }
-.sponsor-logo-card span {
-  font-size:0.7rem; letter-spacing:0.14em; text-transform:uppercase;
-  color:var(--text-muted); font-weight:600;
-}
+.sponsor-card:hover img { filter: grayscale(0); }
 
+/* CTA auspiciantes */
 .sponsor-cta {
-  text-align:center; margin-top:10px; display:flex; flex-direction:column;
-  align-items:center; gap:14px;
+  text-align: center; display: flex; flex-direction: column;
+  align-items: center; gap: 12px;
 }
-.sponsor-cta .dark-text { font-size:0.9rem; }
+.sponsor-cta .dark-text { font-size: 0.88rem; }
 
-/* ─── FAQ ─── */
+@media (max-width: 920px) {
+  .sponsor-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 480px) {
+  .sponsor-grid { grid-template-columns: repeat(2, 1fr); }
+  .sponsor-main-card { padding: 22px 28px; }
+}
 .faq-list { display:grid; gap:14px; }
 .faq-item { overflow:hidden; transition:transform var(--transition),box-shadow var(--transition); }
 .faq-item:hover { transform:translateY(-2px); }
