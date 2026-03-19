@@ -83,7 +83,7 @@ button { cursor:pointer; }
 /* ─── Tipografía ─── */
 .dark-title,.hero-title,.section-title,
 .distance-card h3,.route-info h3,
-.registration-block h3,.final-cta h2 {
+.timeline-item h3,.registration-block h3,.final-cta h2 {
   font-family: "Barlow Condensed", sans-serif;
   text-transform: uppercase;
   line-height: 0.95;
@@ -647,75 +647,33 @@ button { cursor:pointer; }
 }
 .map-modal-close:hover { background:rgba(10,21,36,0.95); transform:scale(1.08); }
 
-/* ─── Agenda — Cronograma sofisticado ─── */
+/* ─── Agenda ─── */
 .agenda-grid { display:grid; grid-template-columns:1.4fr 0.6fr; gap:24px; align-items:start; }
 .agenda-main { padding:38px; }
 .agenda-side { display:flex; flex-direction:column; gap:14px; }
+.timeline    { display:grid; gap:12px; margin-top:24px; }
+.timeline-item {
+  display:grid; grid-template-columns:110px 1fr; gap:16px; align-items:start;
+  padding:18px; border-radius:22px;
+  background:rgba(17,24,39,0.025); border:1px solid rgba(17,24,39,0.05);
+  transition: background var(--transition), transform var(--transition);
+}
+.timeline-item:hover { background:rgba(77,189,245,0.04); transform:translateX(4px); }
+.timeline-hour { font-family:"Barlow Condensed",sans-serif; font-size:2rem; line-height:1; color:#1c6f95; }
+.small-title   { font-size:1.8rem; }
 
-/* Chrono track */
-.chrono-track { margin-top:28px; display:flex; flex-direction:column; gap:32px; }
-.chrono-phase { position:relative; }
-.chrono-phase-label {
-  font-family:"Barlow Condensed",sans-serif;
-  font-size:0.62rem; letter-spacing:0.28em; text-transform:uppercase;
-  color:#2d6c8f; font-weight:700;
-  padding:5px 14px; border-radius:100px;
-  background:rgba(77,189,245,0.08); border:1px solid rgba(77,189,245,0.12);
-  display:inline-block; margin-bottom:14px;
+/* Timeline highlight para largadas */
+.timeline-item-highlight {
+  background:rgba(77,189,245,0.06);
+  border-color:rgba(77,189,245,0.14);
+  box-shadow: inset 3px 0 0 var(--accent);
 }
-.chrono-phase-race .chrono-phase-label {
-  background:rgba(77,189,245,0.14); border-color:rgba(77,189,245,0.22);
-  color:#1c6f95;
+.timeline-item-highlight:hover {
+  background:rgba(77,189,245,0.10);
 }
-.chrono-items {
-  display:flex; flex-direction:column; gap:0;
-  position:relative; padding-left:28px;
+.timeline-item-highlight .timeline-hour {
+  color:var(--accent);
 }
-.chrono-items::before {
-  content:""; position:absolute; left:7px; top:10px; bottom:10px;
-  width:2px; background:linear-gradient(180deg, rgba(77,189,245,0.08), rgba(77,189,245,0.18), rgba(77,189,245,0.08));
-  border-radius:2px;
-}
-.chrono-item {
-  display:grid; grid-template-columns:60px 16px 1fr; gap:0 12px;
-  align-items:center; padding:10px 0; position:relative;
-  transition: transform 220ms ease;
-}
-.chrono-item:hover { transform:translateX(4px); }
-.chrono-time {
-  font-family:"Barlow Condensed",sans-serif;
-  font-size:1.28rem; font-weight:700; line-height:1;
-  color:#5a6b7e; text-align:right;
-  transition: color 220ms ease;
-}
-.chrono-item:hover .chrono-time { color:#1c6f95; }
-.chrono-dot {
-  width:10px; height:10px; border-radius:50%;
-  background:rgba(77,189,245,0.25); border:2px solid rgba(77,189,245,0.35);
-  position:relative; z-index:2; justify-self:center;
-  transition: transform 220ms ease, background 220ms ease;
-}
-.chrono-item:hover .chrono-dot { transform:scale(1.3); background:rgba(77,189,245,0.5); }
-.chrono-dot-pulse {
-  background:var(--accent); border-color:var(--accent);
-  box-shadow:0 0 0 4px rgba(77,189,245,0.12);
-  animation: chrono-pulse 2s ease-in-out infinite;
-}
-@keyframes chrono-pulse {
-  0%,100% { box-shadow:0 0 0 4px rgba(77,189,245,0.12); }
-  50%     { box-shadow:0 0 0 8px rgba(77,189,245,0.06); }
-}
-.chrono-body h3 {
-  font-family:"Inter",sans-serif;
-  font-size:0.88rem; font-weight:600; color:var(--text-dark);
-  margin:0; line-height:1.3;
-}
-.chrono-item-highlight {
-  background:rgba(77,189,245,0.05); border-radius:14px;
-  padding:10px 14px; margin-left:-14px; margin-right:-4px;
-}
-.chrono-item-highlight .chrono-time { color:var(--accent); font-weight:800; }
-.chrono-item-highlight .chrono-body h3 { color:#1c6f95; }
 
 /* ─── Requisitos ─── */
 .requisitos-grid {
@@ -798,23 +756,6 @@ button { cursor:pointer; }
 }
 .sponsor-cta .dark-text { font-size:0.9rem; }
 
-/* Sponsors tier — cards más compactas, grid de 4 columnas */
-.sponsor-logos-row-sponsors {
-  display:grid; grid-template-columns:repeat(4,1fr); gap:14px;
-}
-.sponsor-card-sm {
-  min-width:unset; max-width:unset; flex:unset;
-  padding:18px 16px; gap:8px;
-}
-.sponsor-card-sm img {
-  max-height:52px; max-width:110px;
-}
-.sponsor-card-sm span { font-size:0.62rem; }
-
-/* Colaboran tier — separación visual */
-.sponsor-tier-colabora { margin-bottom:36px; }
-.sponsor-tier-sponsors { margin-bottom:28px; }
-
 /* ─── FAQ ─── */
 .faq-list { display:grid; gap:14px; }
 .faq-item { overflow:hidden; transition:transform var(--transition),box-shadow var(--transition); }
@@ -882,13 +823,8 @@ button { cursor:pointer; }
 
 /* stagger para logos de sponsors */
 .sponsor-logo-card:nth-child(1) { transition-delay:0ms; }
-.sponsor-logo-card:nth-child(2) { transition-delay:60ms; }
-.sponsor-logo-card:nth-child(3) { transition-delay:120ms; }
-.sponsor-logo-card:nth-child(4) { transition-delay:180ms; }
-.sponsor-logo-card:nth-child(5) { transition-delay:240ms; }
-.sponsor-logo-card:nth-child(6) { transition-delay:300ms; }
-.sponsor-logo-card:nth-child(7) { transition-delay:360ms; }
-.sponsor-logo-card:nth-child(8) { transition-delay:420ms; }
+.sponsor-logo-card:nth-child(2) { transition-delay:80ms; }
+.sponsor-logo-card:nth-child(3) { transition-delay:160ms; }
 
 /* ═══════════════════════════════════════════════════════════════
    RESPONSIVE
@@ -922,9 +858,7 @@ button { cursor:pointer; }
   .header-actions  { display:none; }
   .hero-title      { font-size:clamp(3.2rem,10vw,5.8rem); }
   .countdown-grid  { grid-template-columns:repeat(2,1fr); }
-  .chrono-item { grid-template-columns:50px 16px 1fr; }
-  .chrono-time { font-size:1.1rem; }
-  .sponsor-logos-row-sponsors { grid-template-columns:repeat(2,1fr); }
+  .timeline-item   { grid-template-columns:1fr; }
   .distance-grid   { grid-template-columns:1fr; }
   .dcg-featured    { order:-1; }
   .requisitos-grid { grid-template-columns:1fr; }
@@ -958,12 +892,6 @@ button { cursor:pointer; }
   .sponsor-tier-main .sponsor-main-logo { padding:24px 28px; max-width:260px; }
   .sponsor-logos-row { gap:12px; }
   .sponsor-logo-card { min-width:calc(50% - 6px); flex:unset; }
-  .sponsor-logos-row-sponsors { grid-template-columns:repeat(2,1fr); gap:10px; }
-  .sponsor-card-sm { padding:14px 12px; }
-  .chrono-items { padding-left:22px; }
-  .chrono-item { grid-template-columns:46px 12px 1fr; gap:0 8px; }
-  .chrono-time { font-size:1rem; }
-  .chrono-item-highlight { margin-left:-10px; padding:8px 10px; }
   .info-op-card { padding:22px 20px; }
 }
 
@@ -972,7 +900,7 @@ button { cursor:pointer; }
   html { scroll-behavior:auto; }
   .reveal,.btn,.mini-action,.distance-card-glass,.faq-item,
   .floating-whatsapp,.site-header,.route-tab,.dcg-bg,.dcg-content,
-  .particle,.chrono-item,.chrono-dot-pulse,.sponsor-logo-card,.hero-main-image img,
+  .particle,.timeline-item,.sponsor-logo-card,.hero-main-image img,
   .info-op-card,.requisito-card {
     transition:none !important; animation:none !important;
   }
