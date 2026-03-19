@@ -1,11 +1,12 @@
 /* ═══════════════════════════════════════════════════════════════
-   CARRERA HÉROES DE MALVINAS — script.js v3.0
+   CARRERA HÉROES DE MALVINAS — script.js v3.1
+   Countdown → 17 mayo 2026 08:30 ART
 ═══════════════════════════════════════════════════════════════ */
 
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 /* ─── 1. CUENTA REGRESIVA ─── */
-const countdownDate = new Date("2026-04-12T09:00:00-03:00").getTime();
+const countdownDate = new Date("2026-05-17T08:30:00-03:00").getTime();
 
 function updateCountdown() {
   const now = Date.now();
@@ -30,7 +31,6 @@ setInterval(updateCountdown, 1000);
 /* ─── 2. DATOS DE RECORRIDOS ─── */
 const CENTER = [-34.6158, -68.3559];
 
-// Elevación simulada realista para San Rafael (~690m s.n.m., terreno urbano casi plano)
 function genElevation(points, baseAlt, variance) {
   return Array.from({ length: points }, (_, i) => {
     const t = i / (points - 1);
@@ -45,7 +45,7 @@ const routes = {
     title: "Recorrido 1K",
     description: "Circuito participativo y accesible, pensado para acompañar el espíritu comunitario del evento.",
     surface: "Urbano",
-    start: "Zona central del evento",
+    start: "Pista de Atletismo, Polideportivo N° 1",
     gpx: "assets/gpx/carrera-malvinas-1k.gpx",
     color: "#4dbdf5",
     coords: null, elevation: null,
@@ -56,7 +56,7 @@ const routes = {
     title: "Recorrido 5K",
     description: "Circuito equilibrado para quienes quieren vivir la carrera con intensidad y buena experiencia de ritmo.",
     surface: "Urbano",
-    start: "Zona central del evento",
+    start: "Pista de Atletismo, Polideportivo N° 1",
     gpx: "assets/gpx/carrera-malvinas-5k.gpx",
     color: "#74d2ff",
     coords: null, elevation: null,
@@ -67,7 +67,7 @@ const routes = {
     title: "Recorrido 10K",
     description: "Circuito pensado para corredores que buscan una propuesta más exigente y competitiva.",
     surface: "Urbano",
-    start: "Zona central del evento",
+    start: "Pista de Atletismo, Polideportivo N° 1",
     gpx: "assets/gpx/carrera-malvinas-10k.gpx",
     color: "#c9efff",
     coords: null, elevation: null,
@@ -247,14 +247,12 @@ function updateElevationChart(route) {
   if (!canvas || typeof Chart === "undefined") return;
   if (elevationChart) { elevationChart.destroy(); elevationChart = null; }
 
-  // Usar elevación real si existe, o simulada si los datos GPX tienen ele=0
   const elevData = (route.elevation && route.elevation.length > 1)
     ? route.elevation
     : route.fallbackElevation;
 
   if (!elevData) return;
 
-  // Limpiar mensaje previo
   const prev = canvas.parentElement.querySelector(".elev-no-data");
   if (prev) prev.remove();
 
