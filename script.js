@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════════════
-   CARRERA HÉROES DE MALVINAS — script.js v3.1
+   CARRERA HÉROES DE MALVINAS — script.js v4.0
    Countdown → 17 mayo 2026 08:30 ART
 ═══════════════════════════════════════════════════════════════ */
 
@@ -43,35 +43,38 @@ function genElevation(points, baseAlt, variance) {
 const routes = {
   "1k": {
     title: "Recorrido 1K",
+    nominalDistance: "1.0 km",
     description: "Circuito participativo y accesible, pensado para acompañar el espíritu comunitario del evento.",
     surface: "Urbano",
     start: "Pista de Atletismo, Polideportivo N° 1",
     gpx: "assets/gpx/carrera-malvinas-1k.gpx",
     color: "#4dbdf5",
     coords: null, elevation: null,
-    distance: "—", elevUp: "—", elevDown: "—",
+    distance: "1.0 km", elevUp: "s/d", elevDown: "s/d",
     fallbackElevation: genElevation(12, 692, 8)
   },
   "5k": {
     title: "Recorrido 5K",
+    nominalDistance: "5.0 km",
     description: "Circuito equilibrado para quienes quieren vivir la carrera con intensidad y buena experiencia de ritmo.",
     surface: "Urbano",
     start: "Pista de Atletismo, Polideportivo N° 1",
     gpx: "assets/gpx/carrera-malvinas-5k.gpx",
     color: "#74d2ff",
     coords: null, elevation: null,
-    distance: "—", elevUp: "—", elevDown: "—",
+    distance: "5.0 km", elevUp: "s/d", elevDown: "s/d",
     fallbackElevation: genElevation(20, 691, 14)
   },
   "10k": {
     title: "Recorrido 10K",
+    nominalDistance: "10.0 km",
     description: "Circuito pensado para corredores que buscan una propuesta más exigente y competitiva.",
     surface: "Urbano",
     start: "Pista de Atletismo, Polideportivo N° 1",
     gpx: "assets/gpx/carrera-malvinas-10k.gpx",
     color: "#c9efff",
     coords: null, elevation: null,
-    distance: "—", elevUp: "—", elevDown: "—",
+    distance: "10.0 km", elevUp: "s/d", elevDown: "s/d",
     fallbackElevation: genElevation(28, 690, 22)
   }
 };
@@ -131,7 +134,9 @@ async function fetchAndParseGpx(key) {
     console.warn(`GPX ${key}: ${err.message}`);
     route.coords = [];
     route.elevation = null;
-    route.distance = "GPX no disponible";
+    route.distance = route.nominalDistance || "GPX no disponible";
+    route.elevUp = "s/d";
+    route.elevDown = "s/d";
     return false;
   }
 }
@@ -336,6 +341,8 @@ function updateRouteInfo(key) {
   if (downloadGpxBtn)   { downloadGpxBtn.href = r.gpx; downloadGpxBtn.download = `carrera-malvinas-${key}.gpx`; }
 }
 
+updateRouteInfo("1k");
+
 routeTabs.forEach(tab => {
   tab.addEventListener("click", function() {
     const key = this.dataset.route;
@@ -389,13 +396,21 @@ document.addEventListener("keydown", e => { if (e.key === "Escape") closeMapModa
 document.querySelectorAll(".faq-item").forEach(item => {
   const btn = item.querySelector(".faq-question");
   const ans = item.querySelector(".faq-answer");
+  if (!btn || !ans) return;
   btn.addEventListener("click", () => {
     const isActive = item.classList.contains("active");
     document.querySelectorAll(".faq-item").forEach(o => {
       o.classList.remove("active");
-      o.querySelector(".faq-answer").style.maxHeight = null;
+      const otherBtn = o.querySelector(".faq-question");
+      const otherAns = o.querySelector(".faq-answer");
+      if (otherBtn) otherBtn.setAttribute("aria-expanded", "false");
+      if (otherAns) otherAns.style.maxHeight = null;
     });
-    if (!isActive) { item.classList.add("active"); ans.style.maxHeight = ans.scrollHeight + "px"; }
+    if (!isActive) {
+      item.classList.add("active");
+      btn.setAttribute("aria-expanded", "true");
+      ans.style.maxHeight = ans.scrollHeight + "px";
+    }
   });
 });
 
@@ -403,8 +418,14 @@ document.querySelectorAll(".faq-item").forEach(item => {
 const menuToggle = document.getElementById("menuToggle");
 const mainNav    = document.getElementById("mainNav");
 if (menuToggle && mainNav) {
-  menuToggle.addEventListener("click", () => mainNav.classList.toggle("active"));
-  mainNav.querySelectorAll("a").forEach(l => l.addEventListener("click", () => mainNav.classList.remove("active")));
+  menuToggle.addEventListener("click", () => {
+    const isActive = mainNav.classList.toggle("active");
+    menuToggle.setAttribute("aria-expanded", String(isActive));
+  });
+  mainNav.querySelectorAll("a").forEach(l => l.addEventListener("click", () => {
+    mainNav.classList.remove("active");
+    menuToggle.setAttribute("aria-expanded", "false");
+  }));
 }
 
 /* ─── 9. HEADER SCROLL ─── */
@@ -477,3 +498,156 @@ else tryInitMap();
 const style = document.createElement("style");
 style.textContent = "@keyframes spin{to{transform:rotate(360deg)}}";
 document.head.appendChild(style);
+
+/* v5.0 | Interacciones avanzadas */
+(function () {
+  const reduced = prefersReducedMotion;
+  const heroSection = document.querySelector('.hero-section');
+
+  function formatARS(value) {
+    try {
+      return '$' + new Intl.NumberFormat('es-AR').format(Math.round(value));
+    } catch (e) {
+      return '$' + String(Math.round(value)).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    }
+  }
+
+  function getNumericValue(text) {
+    if (!text) return null;
+    const cleaned = text.replace(/[^\d]/g, '');
+    return cleaned ? parseInt(cleaned, 10) : null;
+  }
+
+  const counterTargets = Array.from(document.querySelectorAll('.dcg-price, .pricing-price, .quick-stat-value'))
+    .filter(el => /^\$\s?[\d\.]+/.test((el.textContent || '').trim()));
+
+  if (counterTargets.length) {
+    const animateCount = (el) => {
+      if (el.dataset.countDone === 'true') return;
+      const target = getNumericValue(el.textContent);
+      if (!target) return;
+      const duration = 1400;
+      const start = performance.now();
+      const easeOutQuart = (t) => 1 - Math.pow(1 - t, 4);
+      const frame = (now) => {
+        const progress = Math.min(1, (now - start) / duration);
+        const value = target * easeOutQuart(progress);
+        el.textContent = formatARS(value);
+        if (progress < 1) requestAnimationFrame(frame);
+        else {
+          el.textContent = formatARS(target);
+          el.dataset.countDone = 'true';
+        }
+      };
+      requestAnimationFrame(frame);
+    };
+
+    if (reduced) {
+      counterTargets.forEach(el => {
+        const value = getNumericValue(el.textContent);
+        if (value) el.textContent = formatARS(value);
+      });
+    } else if ('IntersectionObserver' in window) {
+      const counterObserver = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            animateCount(entry.target);
+            obs.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.5 });
+      counterTargets.forEach(el => counterObserver.observe(el));
+    } else {
+      counterTargets.forEach(animateCount);
+    }
+  }
+
+  if (!reduced) {
+    if (heroSection) {
+      let lastParticleTime = 0;
+      heroSection.addEventListener('mousemove', (e) => {
+        const now = Date.now();
+        if (now - lastParticleTime < 50) return;
+        lastParticleTime = now;
+        const rect = heroSection.getBoundingClientRect();
+        const particle = document.createElement('span');
+        particle.className = 'hero-cursor-particle';
+        particle.style.left = (e.clientX - rect.left) + 'px';
+        particle.style.top = (e.clientY - rect.top) + 'px';
+        heroSection.appendChild(particle);
+        setTimeout(() => particle.remove(), 1000);
+      }, { passive: true });
+    }
+
+    document.querySelectorAll('.sponsor-card-animated').forEach(card => {
+      card.addEventListener('mousemove', (e) => {
+        const r = card.getBoundingClientRect();
+        const px = (e.clientX - r.left) / r.width;
+        const py = (e.clientY - r.top) / r.height;
+        const rotateY = (px - 0.5) * 16;
+        const rotateX = (0.5 - py) * 16;
+        card.style.transform = 'perspective(600px) rotateX(' + rotateX.toFixed(2) + 'deg) rotateY(' + rotateY.toFixed(2) + 'deg) translateY(-7px)';
+      });
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = '';
+      });
+    });
+  }
+
+  const progressBar = document.createElement('div');
+  progressBar.className = 'v5-scroll-progress';
+  document.body.appendChild(progressBar);
+
+  const updateScrollProgress = () => {
+    const scrollTop = window.scrollY || window.pageYOffset;
+    const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+    progressBar.style.width = ((scrollTop / maxScroll) * 100) + '%';
+  };
+  updateScrollProgress();
+  window.addEventListener('scroll', updateScrollProgress, { passive: true });
+  window.addEventListener('resize', updateScrollProgress);
+
+  const navLinks = Array.from(document.querySelectorAll('.main-nav a[href^="#"]'));
+  const sectionMap = navLinks
+    .map(link => {
+      const id = link.getAttribute('href');
+      return [link, document.querySelector(id)];
+    })
+    .filter(pair => pair[1]);
+
+  const setActiveLink = (id) => {
+    navLinks.forEach(link => {
+      const active = link.getAttribute('href') === '#' + id;
+      link.classList.toggle('is-active', active);
+      if (active) link.setAttribute('aria-current', 'page');
+      else link.removeAttribute('aria-current');
+    });
+  };
+
+  if ('IntersectionObserver' in window && sectionMap.length) {
+    const navObserver = new IntersectionObserver((entries) => {
+      const visible = entries
+        .filter(entry => entry.isIntersecting)
+        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+      if (visible && visible.target && visible.target.id) {
+        setActiveLink(visible.target.id);
+      }
+    }, {
+      rootMargin: '-25% 0px -55% 0px',
+      threshold: [0.15, 0.35, 0.6]
+    });
+
+    sectionMap.forEach(pair => navObserver.observe(pair[1]));
+  } else if (sectionMap.length) {
+    const onScrollSpy = () => {
+      const offset = window.scrollY + 160;
+      let currentId = sectionMap[0][1].id;
+      sectionMap.forEach(pair => {
+        if (pair[1].offsetTop <= offset) currentId = pair[1].id;
+      });
+      setActiveLink(currentId);
+    };
+    onScrollSpy();
+    window.addEventListener('scroll', onScrollSpy, { passive: true });
+  }
+})();
