@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.0" creator="http://thydzik.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.topografix.com/GPX/1/0" xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
+  <url></url>
+  <time>2026-03-19T04:20:01Z</time>
+  <wpt lat="-34.61525000" lon="-68.35443000">
+    <time>2026-03-19T04:20:01Z</time>
+    <name>Control 1</name>
+    <desc>Salida del Parque</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="-34.61412000" lon="-68.35514000">
+    <time>2026-03-19T04:20:01Z</time>
+    <name>Control 2</name>
+    <desc>Diagonal norte</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="-34.60932000" lon="-68.34954000">
+    <time>2026-03-19T04:20:01Z</time>
+    <name>Control 3</name>
+    <desc>Giro al SE</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="-34.61261000" lon="-68.33905000">
+    <time>2026-03-19T04:20:01Z</time>
+    <name>Control 4</name>
+    <desc>Cerca Km 0</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="-34.61614000" lon="-68.32952000">
+    <time>2026-03-19T04:20:01Z</time>
+    <name>Control 5</name>
+    <desc>Punto mas al este - Solo 10K</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="-34.62587000" lon="-68.33461000">
+    <time>2026-03-19T04:20:01Z</time>
+    <name>Control 6</name>
+    <desc>Giro al oeste - Solo 10K</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="-34.62371000" lon="-68.34072000">
+    <time>2026-03-19T04:20:01Z</time>
+    <name>Hidratacion 1 + Control 7</name>
+    <desc>Km 4.7 del 10K</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="-34.63212000" lon="-68.34536000">
+    <time>2026-03-19T04:20:01Z</time>
+    <name>Control 8</name>
+    <desc>Punto mas al sur - Solo 10K</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="-34.62650000" lon="-68.35530000">
+    <time>2026-03-19T04:20:01Z</time>
+    <name>Hidratacion 2 (NUEVO)</name>
+    <desc>Km 7.5 del 10K - NUEVO</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="-34.62109000" lon="-68.34899000">
+    <time>2026-03-19T04:20:01Z</time>
+    <name>Control 9</name>
+    <desc>Retorno</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="-34.61904000" lon="-68.35500000">
+    <time>2026-03-19T04:20:01Z</time>
+    <name>Control 10</name>
+    <desc>Diagonal retorno</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="-34.61760000" lon="-68.35922000">
+    <time>2026-03-19T04:20:01Z</time>
+    <name>Control 11</name>
+    <desc>Entrada zona Parque</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="-34.61741000" lon="-68.35612000">
+    <time>2026-03-19T04:20:01Z</time>
+    <name>Hidratacion 3 (Meta)</name>
+    <desc>Zona de meta</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="-34.61720000" lon="-68.35580000">
+    <time>2026-03-19T04:20:01Z</time>
+    <name>Cruz Roja - Meta</name>
+    <desc>Punto fijo emergencias</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="-34.62371000" lon="-68.34090000">
+    <time>2026-03-19T04:20:01Z</time>
+    <name>Cruz Roja - Km 5</name>
+    <desc>Junto a Hidratacion 1</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="-34.61730000" lon="-68.35550000">
+    <time>2026-03-19T04:20:01Z</time>
+    <name>Ambulancia</name>
+    <desc>Calle lateral Polideportivo</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+</gpx>
