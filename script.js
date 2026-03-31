@@ -30,6 +30,7 @@ setInterval(updateCountdown, 1000);
 
 /* ─── 2. DATOS DE RECORRIDOS ─── */
 const CENTER = [-34.6158, -68.3559];
+const SUPPORT_GPX = "assets/gpx/puestos-control-hidratacion.gpx";
 
 function genElevation(points, baseAlt, variance) {
   return Array.from({ length: points }, (_, i) => {
@@ -51,6 +52,7 @@ const routes = {
     color: "#4dbdf5",
     coords: null, elevation: null,
     distance: "1.0 km", elevUp: "s/d", elevDown: "s/d",
+    supportThresholdKm: 0.12,
     fallbackElevation: genElevation(12, 692, 8)
   },
   "5k": {
@@ -63,6 +65,13 @@ const routes = {
     color: "#74d2ff",
     coords: null, elevation: null,
     distance: "5.0 km", elevUp: "s/d", elevDown: "s/d",
+    displayDistance: "5.05 km",
+    displayElevUp: "+31.5 m",
+    displayElevDown: "−31.5 m",
+    profileMin: 707,
+    profileMax: 725,
+    supportThresholdKm: 0.12,
+    customElevation: [722.5, 722.1, 722.1, 722.6, 722.8, 722.6, 721.9, 722.0, 722.8, 723.7, 724.4, 724.1, 724.1, 724.5, 725.0, 724.5, 722.5, 720.9, 720.1, 720.5, 720.7, 720.2, 719.5, 718.3, 717.2, 716.3, 716.3, 717.1, 717.4, 717.5, 716.6, 715.4, 714.7, 714.2, 714.1, 714.1, 713.9, 713.9, 714.0, 713.7, 713.1, 712.3, 711.4, 711.0, 710.8, 710.8, 710.8, 710.3, 709.6, 709.3, 709.4, 709.7, 710.0, 709.5, 708.6, 707.9, 707.3, 707.0, 707.2, 707.5, 708.1, 709.0, 709.3, 709.3, 708.8, 708.4, 708.4, 708.7, 709.2, 709.7, 710.3, 710.8, 710.9, 710.8, 710.6, 710.4, 710.7, 711.3, 712.0, 712.7, 713.2, 713.4, 713.5, 713.2, 713.4, 714.1, 715.1, 715.4, 714.9, 714.5, 713.9, 713.7, 714.0, 714.6, 715.9, 717.1, 718.1, 718.5, 719.2, 719.8, 720.5, 721.9, 723.2, 724.5, 724.4, 723.6, 722.6, 722.4, 722.9, 722.9, 723.0, 723.2, 723.7, 723.4, 722.6, 722.0, 722.3, 722.7, 722.9, 722.4],
     fallbackElevation: genElevation(20, 691, 14)
   },
   "10k": {
@@ -75,6 +84,13 @@ const routes = {
     color: "#c9efff",
     coords: null, elevation: null,
     distance: "10.0 km", elevUp: "s/d", elevDown: "s/d",
+    displayDistance: "9.89 km",
+    displayElevUp: "+57.3 m",
+    displayElevDown: "−57.3 m",
+    profileMin: 700,
+    profileMax: 725,
+    supportThresholdKm: 0.12,
+    customElevation: [723.9, 725.0, 723.1, 722.5, 724.2, 723.5, 724.7, 723.6, 720.7, 722.1, 722.0, 719.2, 720.0, 718.1, 715.4, 714.6, 716.0, 715.7, 712.1, 710.5, 711.0, 710.5, 710.2, 710.8, 710.6, 708.6, 706.0, 704.9, 705.3, 706.1, 704.8, 702.9, 703.5, 703.4, 702.8, 702.8, 702.0, 702.5, 703.4, 703.6, 702.5, 700.1, 700.2, 700.7, 700.2, 700.0, 700.4, 701.0, 700.8, 700.4, 700.3, 701.6, 702.5, 703.6, 702.9, 702.2, 703.1, 704.4, 705.0, 706.2, 706.0, 704.8, 705.7, 707.6, 707.9, 707.7, 707.2, 706.7, 706.2, 706.3, 708.0, 709.5, 709.7, 708.4, 708.5, 709.8, 711.2, 712.0, 712.5, 713.3, 713.1, 713.2, 715.9, 716.9, 716.6, 717.2, 718.5, 718.9, 719.2, 719.4, 718.3, 718.0, 718.0, 716.2, 715.8, 716.2, 715.4, 714.0, 713.8, 714.9, 715.5, 714.5, 713.9, 713.8, 715.5, 717.9, 718.6, 719.8, 720.8, 722.3, 724.4, 722.9, 722.4, 723.0, 723.3, 725.0, 723.5, 722.5, 724.0, 723.7],
     fallbackElevation: genElevation(28, 690, 22)
   }
 };
@@ -83,15 +99,21 @@ const routes = {
 function parseGpx(xmlText) {
   const parser = new DOMParser();
   const doc = parser.parseFromString(xmlText, "application/xml");
-  const ns = "http://www.topografix.com/GPX/1/1";
-  let points = Array.from(doc.getElementsByTagNameNS(ns, "trkpt"));
-  if (!points.length) points = Array.from(doc.getElementsByTagNameNS(ns, "rtept"));
+  const ns11 = "http://www.topografix.com/GPX/1/1";
+  const ns10 = "http://www.topografix.com/GPX/1/0";
+
+  let points = Array.from(doc.getElementsByTagNameNS(ns11, "trkpt"));
+  if (!points.length) points = Array.from(doc.getElementsByTagNameNS(ns11, "rtept"));
+  if (!points.length) points = Array.from(doc.getElementsByTagNameNS(ns10, "trkpt"));
+  if (!points.length) points = Array.from(doc.getElementsByTagNameNS(ns10, "rtept"));
   if (!points.length) points = Array.from(doc.querySelectorAll("trkpt, rtept"));
   if (!points.length) return null;
 
   const coords = points.map(pt => [parseFloat(pt.getAttribute("lat")), parseFloat(pt.getAttribute("lon"))]);
   const elevEls = points.map(pt => {
-    const e = pt.getElementsByTagNameNS(ns, "ele")[0] || pt.querySelector("ele");
+    const e = pt.getElementsByTagNameNS(ns11, "ele")[0]
+      || pt.getElementsByTagNameNS(ns10, "ele")[0]
+      || pt.querySelector("ele");
     return e ? parseFloat(e.textContent) : null;
   });
   const hasRealEle = elevEls.some(e => e !== null && e !== 0);
@@ -110,11 +132,40 @@ function parseGpx(xmlText) {
   return { coords, elevation, totalKm, elevUp, elevDown };
 }
 
+function parseWaypointGpx(xmlText) {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(xmlText, "application/xml");
+  const ns11 = "http://www.topografix.com/GPX/1/1";
+  const ns10 = "http://www.topografix.com/GPX/1/0";
+
+  let points = Array.from(doc.getElementsByTagNameNS(ns10, "wpt"));
+  if (!points.length) points = Array.from(doc.getElementsByTagNameNS(ns11, "wpt"));
+  if (!points.length) points = Array.from(doc.querySelectorAll("wpt"));
+
+  return points.map(pt => {
+    const nameNode = pt.getElementsByTagNameNS(ns10, "name")[0]
+      || pt.getElementsByTagNameNS(ns11, "name")[0]
+      || pt.querySelector("name");
+    const descNode = pt.getElementsByTagNameNS(ns10, "desc")[0]
+      || pt.getElementsByTagNameNS(ns11, "desc")[0]
+      || pt.querySelector("desc");
+
+    return {
+      lat: parseFloat(pt.getAttribute("lat")),
+      lon: parseFloat(pt.getAttribute("lon")),
+      name: nameNode ? nameNode.textContent.trim() : "",
+      desc: descNode ? descNode.textContent.trim() : ""
+    };
+  }).filter(point => !Number.isNaN(point.lat) && !Number.isNaN(point.lon));
+}
+
 function haversine([lat1, lon1], [lat2, lon2]) {
   const R = 6371, dLat = (lat2-lat1)*Math.PI/180, dLon = (lon2-lon1)*Math.PI/180;
   const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2;
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 }
+
+let supportPointsCache = null;
 
 async function fetchAndParseGpx(key) {
   const route = routes[key];
@@ -125,25 +176,44 @@ async function fetchAndParseGpx(key) {
     const data = parseGpx(await res.text());
     if (!data || data.coords.length < 2) throw new Error("Sin puntos válidos");
     route.coords = data.coords;
-    route.elevation = data.elevation;
-    route.distance = data.totalKm.toFixed(1) + " km";
-    route.elevUp   = data.elevUp > 0   ? `+${Math.round(data.elevUp)} m`   : "—";
-    route.elevDown = data.elevDown > 0  ? `−${Math.round(data.elevDown)} m` : "—";
+    route.elevation = route.customElevation ? route.customElevation.slice() : data.elevation;
+    route.distance = route.displayDistance || (data.totalKm.toFixed(1) + " km");
+    route.elevUp   = route.displayElevUp || (data.elevUp > 0 ? `+${Math.round(data.elevUp)} m` : "—");
+    route.elevDown = route.displayElevDown || (data.elevDown > 0 ? `−${Math.round(data.elevDown)} m` : "—");
     return true;
   } catch (err) {
     console.warn(`GPX ${key}: ${err.message}`);
     route.coords = [];
-    route.elevation = null;
-    route.distance = route.nominalDistance || "GPX no disponible";
-    route.elevUp = "s/d";
-    route.elevDown = "s/d";
+    route.elevation = route.customElevation ? route.customElevation.slice() : null;
+    route.distance = route.displayDistance || route.nominalDistance || "GPX no disponible";
+    route.elevUp = route.displayElevUp || "s/d";
+    route.elevDown = route.displayElevDown || "s/d";
     return false;
   }
 }
 
+async function fetchSupportPoints() {
+  if (supportPointsCache) return supportPointsCache;
+  try {
+    const res = await fetch(SUPPORT_GPX);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    supportPointsCache = parseWaypointGpx(await res.text());
+  } catch (err) {
+    console.warn(`GPX puestos de control: ${err.message}`);
+    supportPointsCache = [];
+  }
+  return supportPointsCache;
+}
+
 /* ─── 3. MAPA LEAFLET ─── */
-let map = null, currentPolyline = null, currentMarkers = [], animationFrame = null;
-let elevationChart = null, activeRouteKey = "1k";
+let map = null, currentPolyline = null, currentMarkers = [], currentModalMarkers = [], animationFrame = null;
+let elevationChart = null, activeRouteKey = "1k", routeLoadToken = 0;
+
+function clearMapMarkers(targetMap, markers) {
+  if (!targetMap || !markers.length) return;
+  markers.forEach(marker => targetMap.removeLayer(marker));
+  markers.length = 0;
+}
 
 function initMap() {
   const mapEl = document.getElementById("routeMap");
@@ -159,31 +229,42 @@ function initMap() {
 async function loadRoute(key) {
   if (!map) return;
   activeRouteKey = key;
+  const loadToken = ++routeLoadToken;
   const route = routes[key];
+
   if (currentPolyline) { map.removeLayer(currentPolyline); currentPolyline = null; }
-  currentMarkers.forEach(m => map.removeLayer(m));
-  currentMarkers = [];
+  clearMapMarkers(map, currentMarkers);
   if (animationFrame) { cancelAnimationFrame(animationFrame); animationFrame = null; }
 
   showMapLoading(true);
   await fetchAndParseGpx(key);
+  if (loadToken !== routeLoadToken) return;
+  updateRouteInfo(key);
   showMapLoading(false);
 
   const coords = route.coords;
   if (!coords || coords.length < 2) {
-    updateElevationChart(route); return;
+    updateElevationChart(route);
+    return;
   }
+
+  const finalizeRouteVisuals = async () => {
+    if (loadToken !== routeLoadToken) return;
+    addKmMarkers(coords, route.color);
+    addStartEndMarkers(coords, route.color);
+    await addSupportMarkers(route, map, currentMarkers);
+  };
 
   if (prefersReducedMotion) {
     currentPolyline = L.polyline(coords, { color: route.color, weight: 4, opacity: 0.92, lineJoin: "round", lineCap: "round" }).addTo(map);
-    addKmMarkers(coords, route.color);
-    addStartEndMarkers(coords, route.color);
     map.fitBounds(currentPolyline.getBounds(), { padding: [30, 30] });
+    await finalizeRouteVisuals();
   } else {
     const tempLine = L.polyline(coords);
     map.fitBounds(tempLine.getBounds(), { padding: [30, 30] });
-    animatePolyline(coords, route.color, () => { addKmMarkers(coords, route.color); addStartEndMarkers(coords, route.color); });
+    animatePolyline(coords, route.color, finalizeRouteVisuals);
   }
+
   updateElevationChart(route);
 }
 
@@ -193,46 +274,69 @@ function showMapLoading(on) {
   let s = document.getElementById("mapSpinner");
   if (on) {
     if (!s) {
-      s = document.createElement("div"); s.id = "mapSpinner";
+      s = document.createElement("div");
+      s.id = "mapSpinner";
       s.style.cssText = "position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(4,9,18,0.6);border-radius:22px;z-index:500;color:#4dbdf5;font-size:0.8rem;letter-spacing:0.14em;text-transform:uppercase;gap:10px;";
       s.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation:spin 1s linear infinite"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>Cargando recorrido…';
       wrap.parentElement.style.position = "relative";
       wrap.parentElement.appendChild(s);
     }
     s.style.display = "flex";
-  } else { if (s) s.style.display = "none"; }
+  } else if (s) {
+    s.style.display = "none";
+  }
 }
 
 function animatePolyline(coords, color, onComplete) {
-  const totalSteps = 80; let step = 0;
+  const totalSteps = 80;
+  let step = 0;
   currentPolyline = L.polyline([], { color, weight: 4, opacity: 0.92, lineJoin: "round", lineCap: "round" }).addTo(map);
+
   function draw() {
     step++;
     const progress = step / totalSteps;
     const pointCount = Math.max(2, Math.floor(coords.length * progress));
     const pts = coords.slice(0, pointCount);
+
     if (step < totalSteps && pointCount < coords.length) {
-      const from = coords[pointCount-1], to = coords[pointCount];
+      const from = coords[pointCount - 1];
+      const to = coords[pointCount];
       const t = (progress * coords.length) - (pointCount - 1);
-      pts.push([from[0] + (to[0]-from[0])*t, from[1] + (to[1]-from[1])*t]);
+      pts.push([from[0] + (to[0] - from[0]) * t, from[1] + (to[1] - from[1]) * t]);
     }
+
     currentPolyline.setLatLngs(pts);
-    if (step < totalSteps) { animationFrame = requestAnimationFrame(draw); }
-    else { currentPolyline.setLatLngs(coords); if (onComplete) onComplete(); }
+
+    if (step < totalSteps) {
+      animationFrame = requestAnimationFrame(draw);
+    } else {
+      currentPolyline.setLatLngs(coords);
+      if (onComplete) onComplete();
+    }
   }
+
   animationFrame = requestAnimationFrame(draw);
 }
 
 function addKmMarkers(coords, color) {
-  let accumulated = 0, nextKm = 1;
+  let accumulated = 0;
+  let nextKm = 1;
+
   for (let i = 1; i < coords.length; i++) {
-    const prev = coords[i-1], curr = coords[i];
-    const dLat = (curr[0]-prev[0])*111;
-    const dLng = (curr[1]-prev[1])*111*Math.cos(prev[0]*Math.PI/180);
-    accumulated += Math.sqrt(dLat*dLat + dLng*dLng);
+    const prev = coords[i - 1];
+    const curr = coords[i];
+    const dLat = (curr[0] - prev[0]) * 111;
+    const dLng = (curr[1] - prev[1]) * 111 * Math.cos(prev[0] * Math.PI / 180);
+    accumulated += Math.sqrt(dLat * dLat + dLng * dLng);
+
     while (accumulated >= nextKm) {
-      const icon = L.divIcon({ className:"km-marker", html:`<div class="km-marker-inner" style="border-color:${color};color:${color}">${nextKm}km</div>`, iconSize:[40,24], iconAnchor:[20,12] });
-      currentMarkers.push(L.marker(curr, {icon}).addTo(map));
+      const icon = L.divIcon({
+        className: "km-marker",
+        html: `<div class="km-marker-inner" style="border-color:${color};color:${color}">${nextKm}km</div>`,
+        iconSize: [40, 24],
+        iconAnchor: [20, 12]
+      });
+      currentMarkers.push(L.marker(curr, { icon }).addTo(map));
       nextKm++;
     }
   }
@@ -240,34 +344,114 @@ function addKmMarkers(coords, color) {
 
 function addStartEndMarkers(coords, color) {
   if (coords.length < 2) return;
-  const startIcon = L.divIcon({ className:"start-marker", html:`<div class="route-marker-pin route-marker-start" style="background:${color}">Largada</div>`, iconSize:[64,28], iconAnchor:[32,14] });
-  const endIcon   = L.divIcon({ className:"end-marker",   html:`<div class="route-marker-pin route-marker-end">Meta</div>`, iconSize:[48,28], iconAnchor:[24,14] });
-  currentMarkers.push(L.marker(coords[0], {icon:startIcon}).addTo(map));
-  currentMarkers.push(L.marker(coords[coords.length-1], {icon:endIcon}).addTo(map));
+  const startIcon = L.divIcon({
+    className: "start-marker",
+    html: `<div class="route-marker-pin route-marker-start" style="background:${color}">Largada</div>`,
+    iconSize: [64, 28],
+    iconAnchor: [32, 14]
+  });
+  const endIcon = L.divIcon({
+    className: "end-marker",
+    html: `<div class="route-marker-pin route-marker-end">Meta</div>`,
+    iconSize: [48, 28],
+    iconAnchor: [24, 14]
+  });
+
+  currentMarkers.push(L.marker(coords[0], { icon: startIcon }).addTo(map));
+  currentMarkers.push(L.marker(coords[coords.length - 1], { icon: endIcon }).addTo(map));
+}
+
+function getNearestRouteDistanceKm(point, coords) {
+  let best = Infinity;
+  for (let i = 0; i < coords.length; i++) {
+    const d = haversine([point.lat, point.lon], coords[i]);
+    if (d < best) best = d;
+  }
+  return best;
+}
+
+function getSupportPointType(point) {
+  const text = `${point.name} ${point.desc}`.toLowerCase();
+  if (text.includes("hidrat")) return "hidratacion";
+  if (text.includes("cruz roja") || text.includes("ambulancia")) return "salud";
+  return "control";
+}
+
+function createSupportIcon(point) {
+  const type = getSupportPointType(point);
+  const config = type === "hidratacion"
+    ? { label: "H", bg: "#4dbdf5", fg: "#07111d" }
+    : type === "salud"
+      ? { label: "+", bg: "#74f9a8", fg: "#07111d" }
+      : { label: "C", bg: "#f6c86e", fg: "#07111d" };
+
+  return L.divIcon({
+    className: "support-marker-icon",
+    html: `<div style="width:30px;height:30px;border-radius:999px;background:${config.bg};color:${config.fg};border:2px solid rgba(255,255,255,0.9);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;box-shadow:0 8px 20px rgba(0,0,0,0.35);">${config.label}</div>`,
+    iconSize: [30, 30],
+    iconAnchor: [15, 15],
+    popupAnchor: [0, -12]
+  });
+}
+
+function buildSupportPopup(point) {
+  const descHtml = point.desc
+    ? `<div style="margin-top:4px;color:#cad5e2;font-size:12px;line-height:1.4;">${point.desc}</div>`
+    : "";
+  return `<div style="min-width:150px;padding:2px 0;"><strong style="color:#f4f7fb;">${point.name || "Puesto de apoyo"}</strong>${descHtml}</div>`;
+}
+
+async function addSupportMarkers(route, targetMap, markerStore) {
+  if (!targetMap || !route.coords || route.coords.length < 2) return;
+  const points = await fetchSupportPoints();
+  const thresholdKm = route.supportThresholdKm || 0.12;
+
+  points
+    .map(point => ({ ...point, nearestRouteKm: getNearestRouteDistanceKm(point, route.coords) }))
+    .filter(point => point.nearestRouteKm <= thresholdKm)
+    .forEach(point => {
+      const marker = L.marker([point.lat, point.lon], {
+        icon: createSupportIcon(point),
+        keyboard: false
+      }).addTo(targetMap);
+
+      marker.bindPopup(buildSupportPopup(point), {
+        closeButton: true,
+        autoPan: true
+      });
+
+      markerStore.push(marker);
+    });
 }
 
 /* ─── 4. PERFIL DE ELEVACIÓN ─── */
 function updateElevationChart(route) {
   const canvas = document.getElementById("elevationChart");
   if (!canvas || typeof Chart === "undefined") return;
-  if (elevationChart) { elevationChart.destroy(); elevationChart = null; }
+  if (elevationChart) {
+    elevationChart.destroy();
+    elevationChart = null;
+  }
 
-  const elevData = (route.elevation && route.elevation.length > 1)
-    ? route.elevation
-    : route.fallbackElevation;
+  const elevData = (route.customElevation && route.customElevation.length > 1)
+    ? route.customElevation
+    : (route.elevation && route.elevation.length > 1)
+      ? route.elevation
+      : route.fallbackElevation;
 
   if (!elevData) return;
 
   const prev = canvas.parentElement.querySelector(".elev-no-data");
   if (prev) prev.remove();
 
-  const step = Math.max(1, Math.floor(elevData.length / 30));
+  const step = Math.max(1, Math.floor(elevData.length / 40));
   const sampled = elevData.filter((_, i) => i % step === 0);
   const distStr = parseFloat(route.distance) || 0;
+
   const labels = sampled.map((_, i) => {
     if (i === 0) return "Inicio";
-    if (i === sampled.length-1) return "Meta";
-    const km = (i / (sampled.length-1)) * distStr;
+    if (i === sampled.length - 1) return "Meta";
+    const km = (i / (sampled.length - 1)) * distStr;
     return `${km.toFixed(1)}km`;
   });
 
@@ -307,12 +491,22 @@ function updateElevationChart(route) {
           titleColor: "#cad5e2",
           bodyColor: "#4dbdf5",
           padding: 10,
-          callbacks: { label: ctx => ` ${ctx.parsed.y} m s.n.m.` }
+          callbacks: {
+            label: ctx => ` ${Number(ctx.parsed.y).toFixed(1)} m s.n.m.`
+          }
         }
       },
       scales: {
-        x: { grid:{ color:"rgba(255,255,255,0.04)" }, ticks:{ color:"#7e8da3", font:{size:10}, maxTicksLimit:6 } },
-        y: { grid:{ color:"rgba(255,255,255,0.04)" }, ticks:{ color:"#7e8da3", font:{size:10}, callback: v => `${v}m` } }
+        x: {
+          grid: { color: "rgba(255,255,255,0.04)" },
+          ticks: { color: "#7e8da3", font: { size: 10 }, maxTicksLimit: 6 }
+        },
+        y: {
+          min: typeof route.profileMin === "number" ? route.profileMin : undefined,
+          max: typeof route.profileMax === "number" ? route.profileMax : undefined,
+          grid: { color: "rgba(255,255,255,0.04)" },
+          ticks: { color: "#7e8da3", font: { size: 10 }, callback: v => `${v}m` }
+        }
       }
     }
   });
@@ -330,15 +524,19 @@ const routeElevDownEl  = document.getElementById("routeElevDown");
 const downloadGpxBtn   = document.getElementById("downloadGpx");
 
 function updateRouteInfo(key) {
-  const r = routes[key]; if (!r) return;
-  if (routeTitle)       routeTitle.textContent       = r.title;
+  const r = routes[key];
+  if (!r) return;
+  if (routeTitle) routeTitle.textContent = r.title;
   if (routeDescription) routeDescription.textContent = r.description;
-  if (routeSurface)     routeSurface.textContent     = r.surface;
-  if (routeStart)       routeStart.textContent       = r.start;
-  if (routeDistanceEl)  routeDistanceEl.textContent  = r.distance;
-  if (routeElevUpEl)    routeElevUpEl.textContent    = r.elevUp;
-  if (routeElevDownEl)  routeElevDownEl.textContent  = r.elevDown;
-  if (downloadGpxBtn)   { downloadGpxBtn.href = r.gpx; downloadGpxBtn.download = `carrera-malvinas-${key}.gpx`; }
+  if (routeSurface) routeSurface.textContent = r.surface;
+  if (routeStart) routeStart.textContent = r.start;
+  if (routeDistanceEl) routeDistanceEl.textContent = r.distance;
+  if (routeElevUpEl) routeElevUpEl.textContent = r.elevUp;
+  if (routeElevDownEl) routeElevDownEl.textContent = r.elevDown;
+  if (downloadGpxBtn) {
+    downloadGpxBtn.href = r.gpx;
+    downloadGpxBtn.download = `carrera-malvinas-${key}.gpx`;
+  }
 }
 
 updateRouteInfo("1k");
@@ -355,28 +553,43 @@ routeTabs.forEach(tab => {
 
 /* ─── 6. FULLSCREEN DEL MAPA ─── */
 const mapFullscreenBtn = document.getElementById("mapFullscreenBtn");
-const mapModal         = document.getElementById("mapModal");
-const mapModalClose    = document.getElementById("mapModalClose");
-let modalMap = null, modalPolyline = null;
+const mapModal = document.getElementById("mapModal");
+const mapModalClose = document.getElementById("mapModalClose");
+let modalMap = null;
+let modalPolyline = null;
 
 function openMapModal() {
   if (!mapModal) return;
   mapModal.classList.add("active");
   document.body.style.overflow = "hidden";
-  setTimeout(() => {
+
+  setTimeout(async () => {
     if (!modalMap) {
       modalMap = L.map("mapModalContainer", { center: CENTER, zoom: 14, zoomControl: true, scrollWheelZoom: true });
       L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
-        maxZoom:19, subdomains:"abcd",
-        attribution:'&copy; OpenStreetMap contributors &copy; CARTO'
+        maxZoom: 19,
+        subdomains: "abcd",
+        attribution: '&copy; OpenStreetMap contributors &copy; CARTO'
       }).addTo(modalMap);
     }
+
     const route = routes[activeRouteKey];
     if (modalPolyline) modalMap.removeLayer(modalPolyline);
+    clearMapMarkers(modalMap, currentModalMarkers);
+
     if (route.coords && route.coords.length > 1) {
-      modalPolyline = L.polyline(route.coords, { color: route.color, weight: 5, opacity: 0.95, lineJoin:"round", lineCap:"round" }).addTo(modalMap);
+      modalPolyline = L.polyline(route.coords, {
+        color: route.color,
+        weight: 5,
+        opacity: 0.95,
+        lineJoin: "round",
+        lineCap: "round"
+      }).addTo(modalMap);
+
+      await addSupportMarkers(route, modalMap, currentModalMarkers);
       modalMap.fitBounds(modalPolyline.getBounds(), { padding: [40, 40] });
     }
+
     modalMap.invalidateSize();
   }, 80);
 }
@@ -388,17 +601,23 @@ function closeMapModal() {
 }
 
 if (mapFullscreenBtn) mapFullscreenBtn.addEventListener("click", openMapModal);
-if (mapModalClose)    mapModalClose.addEventListener("click", closeMapModal);
-if (mapModal)         mapModal.addEventListener("click", e => { if (e.target === mapModal) closeMapModal(); });
-document.addEventListener("keydown", e => { if (e.key === "Escape") closeMapModal(); });
+if (mapModalClose) mapModalClose.addEventListener("click", closeMapModal);
+if (mapModal) mapModal.addEventListener("click", e => {
+  if (e.target === mapModal) closeMapModal();
+});
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape") closeMapModal();
+});
 
 /* ─── 7. FAQ ─── */
 document.querySelectorAll(".faq-item").forEach(item => {
   const btn = item.querySelector(".faq-question");
   const ans = item.querySelector(".faq-answer");
   if (!btn || !ans) return;
+
   btn.addEventListener("click", () => {
     const isActive = item.classList.contains("active");
+
     document.querySelectorAll(".faq-item").forEach(o => {
       o.classList.remove("active");
       const otherBtn = o.querySelector(".faq-question");
@@ -406,6 +625,7 @@ document.querySelectorAll(".faq-item").forEach(item => {
       if (otherBtn) otherBtn.setAttribute("aria-expanded", "false");
       if (otherAns) otherAns.style.maxHeight = null;
     });
+
     if (!isActive) {
       item.classList.add("active");
       btn.setAttribute("aria-expanded", "true");
@@ -416,12 +636,14 @@ document.querySelectorAll(".faq-item").forEach(item => {
 
 /* ─── 8. MENÚ MÓVIL ─── */
 const menuToggle = document.getElementById("menuToggle");
-const mainNav    = document.getElementById("mainNav");
+const mainNav = document.getElementById("mainNav");
+
 if (menuToggle && mainNav) {
   menuToggle.addEventListener("click", () => {
     const isActive = mainNav.classList.toggle("active");
     menuToggle.setAttribute("aria-expanded", String(isActive));
   });
+
   mainNav.querySelectorAll("a").forEach(l => l.addEventListener("click", () => {
     mainNav.classList.remove("active");
     menuToggle.setAttribute("aria-expanded", "false");
@@ -430,6 +652,7 @@ if (menuToggle && mainNav) {
 
 /* ─── 9. HEADER SCROLL ─── */
 const header = document.getElementById("siteHeader");
+
 function handleHeaderState() {
   if (!header) return;
   header.classList.toggle("scrolled", window.scrollY > 24);
@@ -440,10 +663,12 @@ window.addEventListener("scroll", handleHeaderState, { passive: true });
 /* ─── 10. PARALLAX HERO ─── */
 if (!prefersReducedMotion) {
   const heroParallax = document.getElementById("heroParallax");
+
   function handleParallax() {
     if (!heroParallax) return;
     heroParallax.style.transform = `translate3d(0,${window.scrollY * 0.18}px,0) scale(1.05)`;
   }
+
   handleParallax();
   window.addEventListener("scroll", handleParallax, { passive: true });
 }
@@ -453,15 +678,17 @@ if (!prefersReducedMotion) {
   document.querySelectorAll(".distance-card-glass").forEach(card => {
     const bg = card.querySelector(".dcg-bg");
     if (!bg) return;
+
     card.addEventListener("mousemove", e => {
       const r = card.getBoundingClientRect();
-      const x = ((e.clientX - r.left) / r.width  - 0.5) * 12;
-      const y = ((e.clientY - r.top)  / r.height - 0.5) * 12;
-      bg.style.transform   = `translate(${x}px,${y}px) scale(1.08)`;
-      card.style.transform = `translateY(-6px) rotateX(${-y*0.3}deg) rotateY(${x*0.3}deg)`;
+      const x = ((e.clientX - r.left) / r.width - 0.5) * 12;
+      const y = ((e.clientY - r.top) / r.height - 0.5) * 12;
+      bg.style.transform = `translate(${x}px,${y}px) scale(1.08)`;
+      card.style.transform = `translateY(-6px) rotateX(${-y * 0.3}deg) rotateY(${x * 0.3}deg)`;
     });
+
     card.addEventListener("mouseleave", () => {
-      bg.style.transform   = "translate(0,0) scale(1.05)";
+      bg.style.transform = "translate(0,0) scale(1.05)";
       card.style.transform = "translateY(0) rotateX(0) rotateY(0)";
     });
   });
@@ -469,12 +696,19 @@ if (!prefersReducedMotion) {
 
 /* ─── 12. REVEAL SCROLL ─── */
 const revealItems = document.querySelectorAll(".reveal");
+
 if (prefersReducedMotion) {
   revealItems.forEach(el => el.classList.add("is-visible"));
 } else {
   const obs = new IntersectionObserver(entries => {
-    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add("is-visible"); obs.unobserve(e.target); } });
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add("is-visible");
+        obs.unobserve(e.target);
+      }
+    });
   }, { threshold: 0.10, rootMargin: "0px 0px -40px 0px" });
+
   revealItems.forEach(el => obs.observe(el));
 }
 
@@ -502,43 +736,48 @@ document.head.appendChild(style);
 /* v5.0 | Interacciones avanzadas */
 (function () {
   const reduced = prefersReducedMotion;
-  const heroSection = document.querySelector('.hero-section');
+  const heroSection = document.querySelector(".hero-section");
 
   function formatARS(value) {
     try {
-      return '$' + new Intl.NumberFormat('es-AR').format(Math.round(value));
+      return "$" + new Intl.NumberFormat("es-AR").format(Math.round(value));
     } catch (e) {
-      return '$' + String(Math.round(value)).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+      return "$" + String(Math.round(value)).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     }
   }
 
   function getNumericValue(text) {
     if (!text) return null;
-    const cleaned = text.replace(/[^\d]/g, '');
+    const cleaned = text.replace(/[^\d]/g, "");
     return cleaned ? parseInt(cleaned, 10) : null;
   }
 
-  const counterTargets = Array.from(document.querySelectorAll('.dcg-price, .pricing-price, .quick-stat-value'))
-    .filter(el => /^\$\s?[\d\.]+/.test((el.textContent || '').trim()));
+  const counterTargets = Array.from(document.querySelectorAll(".dcg-price, .pricing-price, .quick-stat-value"))
+    .filter(el => /^\$\s?[\d\.]+/.test((el.textContent || "").trim()));
 
   if (counterTargets.length) {
-    const animateCount = (el) => {
-      if (el.dataset.countDone === 'true') return;
+    const animateCount = el => {
+      if (el.dataset.countDone === "true") return;
       const target = getNumericValue(el.textContent);
       if (!target) return;
+
       const duration = 1400;
       const start = performance.now();
-      const easeOutQuart = (t) => 1 - Math.pow(1 - t, 4);
-      const frame = (now) => {
+      const easeOutQuart = t => 1 - Math.pow(1 - t, 4);
+
+      const frame = now => {
         const progress = Math.min(1, (now - start) / duration);
         const value = target * easeOutQuart(progress);
         el.textContent = formatARS(value);
-        if (progress < 1) requestAnimationFrame(frame);
-        else {
+
+        if (progress < 1) {
+          requestAnimationFrame(frame);
+        } else {
           el.textContent = formatARS(target);
-          el.dataset.countDone = 'true';
+          el.dataset.countDone = "true";
         }
       };
+
       requestAnimationFrame(frame);
     };
 
@@ -547,7 +786,7 @@ document.head.appendChild(style);
         const value = getNumericValue(el.textContent);
         if (value) el.textContent = formatARS(value);
       });
-    } else if ('IntersectionObserver' in window) {
+    } else if ("IntersectionObserver" in window) {
       const counterObserver = new IntersectionObserver((entries, obs) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
@@ -556,6 +795,7 @@ document.head.appendChild(style);
           }
         });
       }, { threshold: 0.5 });
+
       counterTargets.forEach(el => counterObserver.observe(el));
     } else {
       counterTargets.forEach(animateCount);
@@ -565,75 +805,81 @@ document.head.appendChild(style);
   if (!reduced) {
     if (heroSection) {
       let lastParticleTime = 0;
-      heroSection.addEventListener('mousemove', (e) => {
+
+      heroSection.addEventListener("mousemove", e => {
         const now = Date.now();
         if (now - lastParticleTime < 50) return;
         lastParticleTime = now;
+
         const rect = heroSection.getBoundingClientRect();
-        const particle = document.createElement('span');
-        particle.className = 'hero-cursor-particle';
-        particle.style.left = (e.clientX - rect.left) + 'px';
-        particle.style.top = (e.clientY - rect.top) + 'px';
+        const particle = document.createElement("span");
+        particle.className = "hero-cursor-particle";
+        particle.style.left = (e.clientX - rect.left) + "px";
+        particle.style.top = (e.clientY - rect.top) + "px";
         heroSection.appendChild(particle);
+
         setTimeout(() => particle.remove(), 1000);
       }, { passive: true });
     }
 
-    document.querySelectorAll('.sponsor-card-animated').forEach(card => {
-      card.addEventListener('mousemove', (e) => {
+    document.querySelectorAll(".sponsor-card-animated").forEach(card => {
+      card.addEventListener("mousemove", e => {
         const r = card.getBoundingClientRect();
         const px = (e.clientX - r.left) / r.width;
         const py = (e.clientY - r.top) / r.height;
         const rotateY = (px - 0.5) * 16;
         const rotateX = (0.5 - py) * 16;
-        card.style.transform = 'perspective(600px) rotateX(' + rotateX.toFixed(2) + 'deg) rotateY(' + rotateY.toFixed(2) + 'deg) translateY(-7px)';
+        card.style.transform = "perspective(600px) rotateX(" + rotateX.toFixed(2) + "deg) rotateY(" + rotateY.toFixed(2) + "deg) translateY(-7px)";
       });
-      card.addEventListener('mouseleave', () => {
-        card.style.transform = '';
+
+      card.addEventListener("mouseleave", () => {
+        card.style.transform = "";
       });
     });
   }
 
-  const progressBar = document.createElement('div');
-  progressBar.className = 'v5-scroll-progress';
+  const progressBar = document.createElement("div");
+  progressBar.className = "v5-scroll-progress";
   document.body.appendChild(progressBar);
 
   const updateScrollProgress = () => {
     const scrollTop = window.scrollY || window.pageYOffset;
     const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
-    progressBar.style.width = ((scrollTop / maxScroll) * 100) + '%';
+    progressBar.style.width = ((scrollTop / maxScroll) * 100) + "%";
   };
+
   updateScrollProgress();
-  window.addEventListener('scroll', updateScrollProgress, { passive: true });
-  window.addEventListener('resize', updateScrollProgress);
+  window.addEventListener("scroll", updateScrollProgress, { passive: true });
+  window.addEventListener("resize", updateScrollProgress);
 
   const navLinks = Array.from(document.querySelectorAll('.main-nav a[href^="#"]'));
   const sectionMap = navLinks
     .map(link => {
-      const id = link.getAttribute('href');
+      const id = link.getAttribute("href");
       return [link, document.querySelector(id)];
     })
     .filter(pair => pair[1]);
 
-  const setActiveLink = (id) => {
+  const setActiveLink = id => {
     navLinks.forEach(link => {
-      const active = link.getAttribute('href') === '#' + id;
-      link.classList.toggle('is-active', active);
-      if (active) link.setAttribute('aria-current', 'page');
-      else link.removeAttribute('aria-current');
+      const active = link.getAttribute("href") === "#" + id;
+      link.classList.toggle("is-active", active);
+      if (active) link.setAttribute("aria-current", "page");
+      else link.removeAttribute("aria-current");
     });
   };
 
-  if ('IntersectionObserver' in window && sectionMap.length) {
-    const navObserver = new IntersectionObserver((entries) => {
+  if ("IntersectionObserver" in window && sectionMap.length) {
+    const navObserver = new IntersectionObserver(entries => {
       const visible = entries
         .filter(entry => entry.isIntersecting)
         .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+
       if (visible && visible.target && visible.target.id) {
         setActiveLink(visible.target.id);
       }
     }, {
-      rootMargin: '-25% 0px -55% 0px',
+      rootMargin: "-25% 0px -55% 0px",
       threshold: [0.15, 0.35, 0.6]
     });
 
@@ -642,12 +888,15 @@ document.head.appendChild(style);
     const onScrollSpy = () => {
       const offset = window.scrollY + 160;
       let currentId = sectionMap[0][1].id;
+
       sectionMap.forEach(pair => {
         if (pair[1].offsetTop <= offset) currentId = pair[1].id;
       });
+
       setActiveLink(currentId);
     };
+
     onScrollSpy();
-    window.addEventListener('scroll', onScrollSpy, { passive: true });
+    window.addEventListener("scroll", onScrollSpy, { passive: true });
   }
 })();
