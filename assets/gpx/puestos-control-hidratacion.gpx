@@ -1,94 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<gpx version="1.1" creator="Planificador Carrera Malvinas - NeuroTech"
-  xmlns="http://www.topografix.com/GPX/1/1">
-  <wpt lat="-34.61661888" lon="-68.35618115">
-    <name>Largada / Meta</name>
-    <desc>CONTROL | Def. Civil | 4p | Zona de largada y meta. Defensa Civil coordina acceso a pista.</desc>
-    <sym>Waypoint</sym>
-  </wpt>
-  <wpt lat="-34.61680000" lon="-68.35618000">
-    <name>Hidratación Meta</name>
-    <desc>HIDRATACION | Cruz Roja | 3p | Hidratación llegada. Cruz Roja.</desc>
-    <sym>Waypoint</sym>
-  </wpt>
-  <wpt lat="-34.61700000" lon="-68.35590000">
-    <name>Cruz Roja - Meta</name>
-    <desc>EMERGENCIA | Cruz Roja | 2p | Punto fijo emergencias meta.</desc>
-    <sym>Waypoint</sym>
-  </wpt>
-  <wpt lat="-34.61740000" lon="-68.35560000">
-    <name>Ambulancia</name>
-    <desc>EMERGENCIA | Bomberos | 2p | Ambulancia calle lateral Polideportivo.</desc>
-    <sym>Waypoint</sym>
-  </wpt>
-  <wpt lat="-34.61540371" lon="-68.35489863">
-    <name>Control 1 - Salida Parque</name>
-    <desc>CONTROL | Def. Civil | 2p | Salida del Parque hacia la calle. Compartido 5K/10K.</desc>
-    <sym>Waypoint</sym>
-  </wpt>
-  <wpt lat="-34.61437121" lon="-68.35442676">
-    <name>Control 2 - Divergencia 5K/10K</name>
-    <desc>CONTROL | Ejército | 3p | CRÍTICO: punto donde 5K y 10K se separan. Señalización obligatoria.</desc>
-    <sym>Waypoint</sym>
-  </wpt>
-  <wpt lat="-34.60974075" lon="-68.34930101">
-    <name>Control 5K - Giro retorno</name>
-    <desc>CONTROL | Ejército | 2p | Giro del 5K hacia el retorno. Solo 5K.</desc>
-    <sym>Waypoint</sym>
-  </wpt>
-  <wpt lat="-34.61451839" lon="-68.34091280">
-    <name>Hidratación 5K km 2.5</name>
-    <desc>HIDRATACION | Cruz Roja | 3p | Hidratación mitad del 5K.</desc>
-    <sym>Waypoint</sym>
-  </wpt>
-  <wpt lat="-34.61030293" lon="-68.34936823">
-    <name>Control 3 - Giro km 1.2</name>
-    <desc>CONTROL | Ejército | 2p | Giro hacia el este. Compartido inicio 5K/10K.</desc>
-    <sym>Waypoint</sym>
-  </wpt>
-  <wpt lat="-34.61449206" lon="-68.33629243">
-    <name>Hidratación 10K km 2.5</name>
-    <desc>HIDRATACION | Cruz Roja | 3p | Hidratación tramo este del 10K.</desc>
-    <sym>Waypoint</sym>
-  </wpt>
-  <wpt lat="-34.61653830" lon="-68.33027222">
-    <name>Control 4 - Punto este</name>
-    <desc>CONTROL | Ejército | 2p | Giro al sur. Punto más al este. Solo 10K.</desc>
-    <sym>Waypoint</sym>
-  </wpt>
-  <wpt lat="-34.62574907" lon="-68.33429873">
-    <name>Control 5 - Giro oeste km 4.2</name>
-    <desc>CONTROL | Ejército | 2p | Giro al oeste en el loop sur. Solo 10K.</desc>
-    <sym>Waypoint</sym>
-  </wpt>
-  <wpt lat="-34.62463410" lon="-68.34142604">
-    <name>Hidratación + Control 6 km 5.0</name>
-    <desc>HIDRATACION | Cruz Roja | 3p | Hidratación + control. Zona media del 10K.</desc>
-    <sym>Waypoint</sym>
-  </wpt>
-  <wpt lat="-34.62876947" lon="-68.34350521">
-    <name>Cruz Roja - Km 5.5</name>
-    <desc>EMERGENCIA | Cruz Roja | 2p | Punto fijo emergencias zona sur. Punto más lejano del 10K.</desc>
-    <sym>Waypoint</sym>
-  </wpt>
-  <wpt lat="-34.63291070" lon="-68.34559160">
-    <name>Control 7 - Punto sur km 6.0</name>
-    <desc>CONTROL | Ejército | 2p | Giro al oeste. Punto más al sur. Solo 10K.</desc>
-    <sym>Waypoint</sym>
-  </wpt>
-  <wpt lat="-34.62703054" lon="-68.35651481">
-    <name>Hidratación 10K km 7.5</name>
-    <desc>HIDRATACION | Cruz Roja | 3p | Hidratación zona retorno del 10K.</desc>
-    <sym>Waypoint</sym>
-  </wpt>
-  <wpt lat="-34.62137244" lon="-68.34952339">
-    <name>Control 8 - Merge 5K/10K</name>
-    <desc>CONTROL | Ejército | 2p | Punto donde 10K vuelve al circuito compartido con 5K.</desc>
-    <sym>Waypoint</sym>
-  </wpt>
-  <wpt lat="-34.61910302" lon="-68.35491334">
-    <name>Control 9 - Retorno km 9.0</name>
-    <desc>CONTROL | Def. Civil | 2p | Tramo retorno compartido 5K/10K. Cerca del Polideportivo.</desc>
-    <sym>Waypoint</sym>
-  </wpt>
+<gpx version="1.1" creator="Planificador Carrera Malvinas - NeuroTech">
+<wpt lat="-34.61661888" lon="-68.35618115"><name>Largada / Meta</name><desc>Def. Civil - 2 personas</desc></wpt>
+<wpt lat="-34.61700000" lon="-68.35590000"><name>Hidratación Meta</name><desc>Cruz Roja - 2 personas</desc></wpt>
+<wpt lat="-34.61720000" lon="-68.35565000"><name>Cruz Roja - Meta</name><desc>Cruz Roja - 2 personas</desc></wpt>
+<wpt lat="-34.61755000" lon="-68.35545000"><name>Ambulancia</name><desc>Bomberos - 2 personas</desc></wpt>
+<wpt lat="-34.61766487" lon="-68.35516649"><name>Control 1K - Punto medio loop (NUEVO)</name><desc>Def. Civil - 2 personas</desc></wpt>
+<wpt lat="-34.61525471" lon="-68.35439622"><name>Control 1 - Salida Parque</name><desc>Def. Civil - 2 personas</desc></wpt>
+<wpt lat="-34.61416866" lon="-68.35480928"><name>Control 2 - Divergencia 5K/10K</name><desc>Ejército - 2 personas</desc></wpt>
+<wpt lat="-34.61313115" lon="-68.33998203"><name>Control 5K - Giro norte km 1.3</name><desc>Ejército - 2 personas</desc></wpt>
+<wpt lat="-34.61451839" lon="-68.34091280"><name>Hidratación 5K km 2.5</name><desc>Cruz Roja - 2 personas</desc></wpt>
+<wpt lat="-34.60998765" lon="-68.34942341"><name>Control 3 - Giro km 1.3</name><desc>Ejército - 2 personas</desc></wpt>
+<wpt lat="-34.61449206" lon="-68.33629243"><name>Hidratación 10K km 2.5</name><desc>Cruz Roja - 2 personas</desc></wpt>
+<wpt lat="-34.61653830" lon="-68.33027222"><name>Control 4 - Punto ESTE km 3.2</name><desc>Ejército - 2 personas</desc></wpt>
+<wpt lat="-34.62574907" lon="-68.33429873"><name>Control 5 - Giro oeste km 4.4</name><desc>Ejército - 2 personas</desc></wpt>
+<wpt lat="-34.62463410" lon="-68.34142604"><name>Hidratación + Control 6 km 5.0</name><desc>Cruz Roja - 2 personas</desc></wpt>
+<wpt lat="-34.62876947" lon="-68.34350521"><name>Cruz Roja - km 5.6</name><desc>Cruz Roja - 2 personas</desc></wpt>
+<wpt lat="-34.63250000" lon="-68.34527000"><name>Control 7 - Punto SUR km 6.1 (CORREGIDO)</name><desc>Ejército - 2 personas</desc></wpt>
+<wpt lat="-34.62703054" lon="-68.35651481"><name>Hidratación 10K km 7.3</name><desc>Cruz Roja - 2 personas</desc></wpt>
+<wpt lat="-34.62137244" lon="-68.34952339"><name>Control 8 - Merge 5K/10K km 8.4/4.1</name><desc>Ejército - 2 personas</desc></wpt>
+<wpt lat="-34.61858785" lon="-68.35589290"><name>Control 9 - Retorno km 9.0/4.4</name><desc>Ejército - 2 personas</desc></wpt>
 </gpx>
