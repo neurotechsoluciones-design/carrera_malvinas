@@ -548,6 +548,26 @@ button { cursor:pointer; }
 }
 .route-tab:hover:not(.active) { background:rgba(17,24,39,0.08); }
 
+.map-theme-switch {
+  display:flex; gap:8px; margin:-8px 0 22px;
+  padding:5px; width:fit-content;
+  background:rgba(17,24,39,0.05); border-radius:16px;
+}
+
+.map-theme-btn {
+  min-height:40px; padding:0 16px; border-radius:12px; border:0;
+  background:transparent; color:var(--text-dark-soft);
+  font-weight:700; font-size:0.85rem;
+  transition: background var(--transition), color var(--transition), box-shadow var(--transition);
+}
+
+.map-theme-btn.active {
+  background:var(--bg-dark); color:var(--text-light);
+  box-shadow:0 4px 14px rgba(0,0,0,0.18);
+}
+
+.map-theme-btn:hover:not(.active) { background:rgba(17,24,39,0.08); }
+
 .route-info h3 { margin:0 0 10px; font-size:2.2rem; }
 .route-info p  { margin:0 0 22px; font-size:0.9rem; line-height:1.64; }
 .route-meta    { display:flex; flex-direction:column; gap:12px; margin-bottom:20px; }
@@ -577,6 +597,9 @@ button { cursor:pointer; }
 .route-links-list a:hover { transform:translateY(-2px); box-shadow:0 10px 24px rgba(13,55,82,0.10); background:#ffffff; }
 
 .route-map-card { padding:22px; }
+.route-map-toolbar { display:none; }
+.route-map-toolbar-mobile { margin-bottom:16px; }
+.route-tabs-compact,.map-theme-switch-compact { margin:0; width:100%; }
 .route-map-leaflet-wrap { position:relative; border-radius:18px; overflow:hidden; }
 .route-map-leaflet { height:400px; border-radius:18px; z-index:1; }
 
@@ -1104,6 +1127,22 @@ button { cursor:pointer; }
   color: var(--accent);
 }
 
+.dcg-price,
+.pricing-price,
+.quick-stat-value {
+  opacity:0.68;
+  transform:translateY(8px);
+  transition: opacity 360ms ease, transform 360ms ease, color 360ms ease, text-shadow 360ms ease;
+}
+
+.dcg-price.is-emphasized,
+.pricing-price.is-emphasized,
+.quick-stat-value.is-emphasized {
+  opacity:1;
+  transform:translateY(0);
+  text-shadow:0 0 18px rgba(77,189,245,0.12);
+}
+
 .pricing-card p {
   margin: 6px 0;
   font-size: 0.9rem;
@@ -1489,6 +1528,14 @@ button { cursor:pointer; }
   .hero-cursor-particle{
     display:none !important;
   }
+
+  .dcg-price,
+  .pricing-price,
+  .quick-stat-value {
+    opacity:1 !important;
+    transform:none !important;
+    text-shadow:none !important;
+  }
 }
 
 /* v6.0 | performance/mobile overrides */
@@ -1655,6 +1702,35 @@ button { cursor:pointer; }
   .route-tab {
     flex: 1;
     padding-inline: 10px;
+  }
+
+  .map-theme-switch {
+    width:100%;
+    margin-bottom:18px;
+  }
+
+  .map-theme-btn {
+    flex:1;
+    padding-inline:10px;
+  }
+
+  .route-controls .route-tabs,
+  .route-controls .map-theme-switch {
+    display:none;
+  }
+
+  .route-map-toolbar {
+    position:sticky;
+    top:calc(var(--header-height) + 10px);
+    z-index:12;
+    display:grid;
+    gap:10px;
+    margin:-6px -6px 14px;
+    padding:6px;
+    border-radius:18px;
+    background:rgba(4,9,18,0.92);
+    border:1px solid rgba(255,255,255,0.08);
+    box-shadow:0 16px 34px rgba(0,0,0,0.22);
   }
 
   .route-stat-item strong {

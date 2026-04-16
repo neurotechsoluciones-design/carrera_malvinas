@@ -35,6 +35,24 @@ const SUPPORT_GPX = "assets/gpx/puestos-control-hidratacion.gpx";
 const LEAFLET_CSS_URL = "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css";
 const LEAFLET_JS_URL = "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js";
 const CHART_JS_URL = "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js";
+const MAP_THEMES = {
+  dark: {
+    baseUrl: "https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png",
+    overlayUrl: "https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}{r}.png",
+    options: {
+      maxZoom: 19,
+      subdomains: "abcd",
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>'
+    }
+  },
+  streets: {
+    baseUrl: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    options: {
+      maxZoom: 19,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }
+  }
+};
 
 const loadedAssets = new Map();
 
@@ -255,6 +273,9 @@ async function fetchSupportPoints() {
 /* ─── 3. MAPA LEAFLET ─── */
 let map = null, currentPolyline = null, currentMarkers = [], currentModalMarkers = [], animationFrame = null;
 let elevationChart = null, activeRouteKey = "1k", routeLoadToken = 0;
+let activeMapTheme = "dark";
+const mapLayerState = { base: null, overlay: null };
+const modalLayerState = { base: null, overlay: null };
 
 function clearMapMarkers(targetMap, markers) {
   if (!targetMap || !markers.length) return;
@@ -262,14 +283,41 @@ function clearMapMarkers(targetMap, markers) {
   markers.length = 0;
 }
 
+function applyMapTheme(targetMap, layerState, themeKey) {
+  if (!targetMap || typeof L === "undefined") return;
+  const theme = MAP_THEMES[themeKey] || MAP_THEMES.dark;
+
+  if (layerState.base) {
+    targetMap.removeLayer(layerState.base);
+    layerState.base = null;
+  }
+
+  if (layerState.overlay) {
+    targetMap.removeLayer(layerState.overlay);
+    layerState.overlay = null;
+  }
+
+  layerState.base = L.tileLayer(theme.baseUrl, theme.options).addTo(targetMap);
+
+  if (theme.overlayUrl) {
+    layerState.overlay = L.tileLayer(theme.overlayUrl, {
+      ...theme.options,
+      pane: "overlayPane"
+    }).addTo(targetMap);
+  }
+}
+
+function syncMapThemeButtons(themeKey) {
+  document.querySelectorAll(".map-theme-btn").forEach(btn => {
+    btn.classList.toggle("active", btn.dataset.mapTheme === themeKey);
+  });
+}
+
 function initMap() {
   const mapEl = document.getElementById("routeMap");
   if (!mapEl || typeof L === "undefined") return;
   map = L.map("routeMap", { center: CENTER, zoom: 14, zoomControl: true, scrollWheelZoom: false });
-  L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
-    maxZoom: 19, subdomains: "abcd",
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>'
-  }).addTo(map);
+  applyMapTheme(map, mapLayerState, activeMapTheme);
   loadRoute(activeRouteKey || "1k");
 }
 
@@ -561,6 +609,7 @@ function updateElevationChart(route) {
 
 /* ─── 5. TABS DE RECORRIDO ─── */
 const routeTabs = document.querySelectorAll(".route-tab");
+const mapThemeButtons = document.querySelectorAll(".map-theme-btn");
 const routeTitle       = document.getElementById("routeTitle");
 const routeDescription = document.getElementById("routeDescription");
 const routeSurface     = document.getElementById("routeSurface");
@@ -586,16 +635,34 @@ function updateRouteInfo(key) {
   }
 }
 
+function syncActiveRouteTabs(key) {
+  routeTabs.forEach(tab => {
+    tab.classList.toggle("active", tab.dataset.route === key);
+  });
+}
+
 updateRouteInfo("1k");
+syncActiveRouteTabs("1k");
+syncMapThemeButtons(activeMapTheme);
 
 routeTabs.forEach(tab => {
   tab.addEventListener("click", function() {
     const key = this.dataset.route;
     activeRouteKey = key;
-    routeTabs.forEach(t => t.classList.remove("active"));
-    this.classList.add("active");
+    syncActiveRouteTabs(key);
     updateRouteInfo(key);
     loadRoute(key);
+  });
+});
+
+mapThemeButtons.forEach(btn => {
+  btn.addEventListener("click", () => {
+    const themeKey = btn.dataset.mapTheme;
+    if (!themeKey || themeKey === activeMapTheme) return;
+    activeMapTheme = themeKey;
+    syncMapThemeButtons(themeKey);
+    if (map) applyMapTheme(map, mapLayerState, themeKey);
+    if (modalMap) applyMapTheme(modalMap, modalLayerState, themeKey);
   });
 });
 
@@ -614,11 +681,7 @@ function openMapModal() {
   setTimeout(async () => {
     if (!modalMap) {
       modalMap = L.map("mapModalContainer", { center: CENTER, zoom: 14, zoomControl: true, scrollWheelZoom: true });
-      L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
-        maxZoom: 19,
-        subdomains: "abcd",
-        attribution: '&copy; OpenStreetMap contributors &copy; CARTO'
-      }).addTo(modalMap);
+      applyMapTheme(modalMap, modalLayerState, activeMapTheme);
     }
 
     const route = routes[activeRouteKey];
@@ -821,69 +884,24 @@ document.head.appendChild(style);
 /* v5.0 | Interacciones avanzadas */
 (function () {
   const reduced = prefersReducedMotion;
-  const heroSection = document.querySelector(".hero-section");
+  const priceTargets = Array.from(document.querySelectorAll(".dcg-price, .pricing-price, .quick-stat-value"));
 
-  function formatARS(value) {
-    try {
-      return "$" + new Intl.NumberFormat("es-AR").format(Math.round(value));
-    } catch (e) {
-      return "$" + String(Math.round(value)).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-    }
-  }
-
-  function getNumericValue(text) {
-    if (!text) return null;
-    const cleaned = text.replace(/[^\d]/g, "");
-    return cleaned ? parseInt(cleaned, 10) : null;
-  }
-
-  const counterTargets = Array.from(document.querySelectorAll(".dcg-price, .pricing-price, .quick-stat-value"))
-    .filter(el => /^\$\s?[\d\.]+/.test((el.textContent || "").trim()));
-
-  if (counterTargets.length) {
-    const animateCount = el => {
-      if (el.dataset.countDone === "true") return;
-      const target = getNumericValue(el.textContent);
-      if (!target) return;
-
-      const duration = 1400;
-      const start = performance.now();
-      const easeOutQuart = t => 1 - Math.pow(1 - t, 4);
-
-      const frame = now => {
-        const progress = Math.min(1, (now - start) / duration);
-        const value = target * easeOutQuart(progress);
-        el.textContent = formatARS(value);
-
-        if (progress < 1) {
-          requestAnimationFrame(frame);
-        } else {
-          el.textContent = formatARS(target);
-          el.dataset.countDone = "true";
-        }
-      };
-
-      requestAnimationFrame(frame);
-    };
-
+  if (priceTargets.length) {
     if (reduced) {
-      counterTargets.forEach(el => {
-        const value = getNumericValue(el.textContent);
-        if (value) el.textContent = formatARS(value);
-      });
+      priceTargets.forEach(el => el.classList.add("is-emphasized"));
     } else if ("IntersectionObserver" in window) {
-      const counterObserver = new IntersectionObserver((entries, obs) => {
+      const priceObserver = new IntersectionObserver((entries, obs) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
-            animateCount(entry.target);
+            entry.target.classList.add("is-emphasized");
             obs.unobserve(entry.target);
           }
         });
-      }, { threshold: 0.5 });
+      }, { threshold: 0.45 });
 
-      counterTargets.forEach(el => counterObserver.observe(el));
+      priceTargets.forEach(el => priceObserver.observe(el));
     } else {
-      counterTargets.forEach(animateCount);
+      priceTargets.forEach(el => el.classList.add("is-emphasized"));
     }
   }
 

@@ -506,6 +506,11 @@
               <button class="route-tab" data-route="10k" type="button">10K</button>
             </div>
 
+            <div class="map-theme-switch" role="group" aria-label="Estilo del mapa">
+              <button class="map-theme-btn active" data-map-theme="dark" type="button">Oscuro</button>
+              <button class="map-theme-btn" data-map-theme="streets" type="button">Calles</button>
+            </div>
+
             <div class="route-info">
               <h3 id="routeTitle" class="dark-title">Recorrido 1K</h3>
               <p id="routeDescription" class="dark-text">Circuito participativo y accesible, pensado para acompañar el espíritu comunitario del evento.</p>
@@ -542,6 +547,19 @@
           </div>
 
           <div class="panel-dark route-map-card reveal">
+            <div class="route-map-toolbar route-map-toolbar-mobile">
+              <div class="route-tabs route-tabs-compact" role="tablist" aria-label="Recorridos del mapa">
+                <button class="route-tab active" data-route="1k" type="button">1K</button>
+                <button class="route-tab" data-route="5k" type="button">5K</button>
+                <button class="route-tab" data-route="10k" type="button">10K</button>
+              </div>
+
+              <div class="map-theme-switch map-theme-switch-compact" role="group" aria-label="Fondo del mapa">
+                <button class="map-theme-btn active" data-map-theme="dark" type="button">Oscuro</button>
+                <button class="map-theme-btn" data-map-theme="streets" type="button">Calles</button>
+              </div>
+            </div>
+
             <div class="route-map-leaflet-wrap">
               <div id="routeMap" class="route-map-leaflet"></div>
               <button class="map-fullscreen-btn" id="mapFullscreenBtn" title="Pantalla completa" type="button" aria-label="Ver mapa en pantalla completa">
