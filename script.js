@@ -4,6 +4,7 @@
 ═══════════════════════════════════════════════════════════════ */
 
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const canHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
 
 /* ─── 1. CUENTA REGRESIVA ─── */
 const countdownDate = new Date("2026-05-17T08:30:00-03:00").getTime();
@@ -31,6 +32,52 @@ setInterval(updateCountdown, 1000);
 /* ─── 2. DATOS DE RECORRIDOS ─── */
 const CENTER = [-34.6158, -68.3559];
 const SUPPORT_GPX = "assets/gpx/puestos-control-hidratacion.gpx";
+const LEAFLET_CSS_URL = "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css";
+const LEAFLET_JS_URL = "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js";
+const CHART_JS_URL = "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js";
+
+const loadedAssets = new Map();
+
+function loadStylesheetOnce(url) {
+  if (loadedAssets.has(url)) return loadedAssets.get(url);
+  const promise = new Promise((resolve, reject) => {
+    if (document.querySelector(`link[href="${url}"]`)) {
+      resolve();
+      return;
+    }
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = url;
+    link.onload = resolve;
+    link.onerror = () => reject(new Error(`No se pudo cargar ${url}`));
+    document.head.appendChild(link);
+  });
+  loadedAssets.set(url, promise);
+  return promise;
+}
+
+function loadScriptOnce(url, globalName) {
+  if (globalName && window[globalName]) return Promise.resolve();
+  if (loadedAssets.has(url)) return loadedAssets.get(url);
+  const promise = new Promise((resolve, reject) => {
+    const script = document.createElement("script");
+    script.src = url;
+    script.async = true;
+    script.onload = resolve;
+    script.onerror = () => reject(new Error(`No se pudo cargar ${url}`));
+    document.head.appendChild(script);
+  });
+  loadedAssets.set(url, promise);
+  return promise;
+}
+
+function loadMapDependencies() {
+  return Promise.all([
+    loadStylesheetOnce(LEAFLET_CSS_URL),
+    loadScriptOnce(LEAFLET_JS_URL, "L"),
+    loadScriptOnce(CHART_JS_URL, "Chart")
+  ]);
+}
 
 function genElevation(points, baseAlt, variance) {
   return Array.from({ length: points }, (_, i) => {
@@ -223,7 +270,7 @@ function initMap() {
     maxZoom: 19, subdomains: "abcd",
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>'
   }).addTo(map);
-  loadRoute("1k");
+  loadRoute(activeRouteKey || "1k");
 }
 
 async function loadRoute(key) {
@@ -255,7 +302,7 @@ async function loadRoute(key) {
     await addSupportMarkers(route, map, currentMarkers);
   };
 
-  if (prefersReducedMotion) {
+  if (prefersReducedMotion || !canHover || window.innerWidth < 768) {
     currentPolyline = L.polyline(coords, { color: route.color, weight: 4, opacity: 0.92, lineJoin: "round", lineCap: "round" }).addTo(map);
     map.fitBounds(currentPolyline.getBounds(), { padding: [30, 30] });
     await finalizeRouteVisuals();
@@ -544,6 +591,7 @@ updateRouteInfo("1k");
 routeTabs.forEach(tab => {
   tab.addEventListener("click", function() {
     const key = this.dataset.route;
+    activeRouteKey = key;
     routeTabs.forEach(t => t.classList.remove("active"));
     this.classList.add("active");
     updateRouteInfo(key);
@@ -674,7 +722,7 @@ if (!prefersReducedMotion) {
 }
 
 /* ─── 11. PARALLAX 3D EN CARDS GLASSMORPHISM ─── */
-if (!prefersReducedMotion) {
+if (!prefersReducedMotion && canHover && window.innerWidth >= 920) {
   document.querySelectorAll(".distance-card-glass").forEach(card => {
     const bg = card.querySelector(".dcg-bg");
     if (!bg) return;
@@ -720,13 +768,50 @@ if (!prefersReducedMotion) {
   });
 }
 
-/* ─── 14. INIT MAPA ─── */
-function tryInitMap() {
-  if (typeof L !== "undefined") initMap();
-  else setTimeout(tryInitMap, 100);
+/* ─── 14. INIT MAPA BAJO DEMANDA ─── */
+let mapBootStarted = false;
+
+function showMapFallback(message) {
+  const mapEl = document.getElementById("routeMap");
+  if (!mapEl) return;
+  showMapLoading(false);
+  mapEl.innerHTML = `<div class="map-fallback">${message}</div>`;
 }
-if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", tryInitMap);
-else tryInitMap();
+
+function bootRouteMap() {
+  if (mapBootStarted || map) return;
+  mapBootStarted = true;
+  showMapLoading(true);
+  loadMapDependencies()
+    .then(() => initMap())
+    .catch(err => {
+      console.warn(err.message);
+      showMapFallback("Mapa no disponible. Podés descargar los GPX desde los enlaces.");
+    });
+}
+
+function observeRouteMap() {
+  const routesSection = document.getElementById("recorridos");
+  const routeMapEl = document.getElementById("routeMap");
+  if (!routesSection || !routeMapEl) return;
+
+  if (!("IntersectionObserver" in window)) {
+    bootRouteMap();
+    return;
+  }
+
+  const mapObserver = new IntersectionObserver((entries, obs) => {
+    if (entries.some(entry => entry.isIntersecting)) {
+      bootRouteMap();
+      obs.disconnect();
+    }
+  }, { rootMargin: "320px 0px" });
+
+  mapObserver.observe(routesSection);
+}
+
+if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", observeRouteMap);
+else observeRouteMap();
 
 /* ─── CSS inline para spinner animation ─── */
 const style = document.createElement("style");
@@ -802,26 +887,7 @@ document.head.appendChild(style);
     }
   }
 
-  if (!reduced) {
-    if (heroSection) {
-      let lastParticleTime = 0;
-
-      heroSection.addEventListener("mousemove", e => {
-        const now = Date.now();
-        if (now - lastParticleTime < 50) return;
-        lastParticleTime = now;
-
-        const rect = heroSection.getBoundingClientRect();
-        const particle = document.createElement("span");
-        particle.className = "hero-cursor-particle";
-        particle.style.left = (e.clientX - rect.left) + "px";
-        particle.style.top = (e.clientY - rect.top) + "px";
-        heroSection.appendChild(particle);
-
-        setTimeout(() => particle.remove(), 1000);
-      }, { passive: true });
-    }
-
+  if (!reduced && canHover && window.innerWidth >= 920) {
     document.querySelectorAll(".sponsor-card-animated").forEach(card => {
       card.addEventListener("mousemove", e => {
         const r = card.getBoundingClientRect();

@@ -2,12 +2,13 @@
 <html lang="es-AR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#07111d" />
   <title>Carrera Héroes de Malvinas | 17 de mayo de 2026 | San Rafael, Mendoza</title>
   <meta name="description" content="Carrera Héroes de Malvinas. 17 de mayo de 2026 en San Rafael, Mendoza. 1K participativa, 5K y 10K. Homenaje, comunidad y desafío en una jornada abierta a toda la comunidad." />
   <meta name="keywords" content="Carrera Héroes de Malvinas, San Rafael, Mendoza, 1K, 5K, 10K, carrera conmemorativa, Malvinas, inscripción carrera, evento deportivo, Polideportivo" />
   <meta name="author" content="Carrera Héroes de Malvinas" />
-  <link rel="canonical" href="https://neurotechsoluciones-design.github.iof/carrera_malvinas/" />
+  <link rel="canonical" href="https://neurotechsoluciones-design.github.io/carrera_malvinas/" />
   <meta property="og:title" content="Carrera Héroes de Malvinas — 17 de mayo de 2026" />
   <meta property="og:description" content="Sumate a una jornada que une homenaje, comunidad y deporte en San Rafael, Mendoza. Elegí 1K, 5K o 10K e inscribite online." />
   <meta property="og:type" content="website" />
@@ -16,8 +17,10 @@
   <meta property="og:image" content="https://neurotechsoluciones-design.github.io/carrera_malvinas/assets/og-image.jpg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin />
+  <link rel="preload" as="image" href="assets/hero-bg.jpg" />
+  <link rel="preload" as="image" href="assets/hero-main.jpg" fetchpriority="high" />
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -25,7 +28,7 @@
   <header class="site-header" id="siteHeader">
     <div class="container header-inner">
       <a href="#inicio" class="brand">
-        <img src="assets/logo-principal.png" alt="Ejército Argentino" class="brand-logo" />
+        <img src="assets/logo-principal.png" alt="Ejército Argentino" class="brand-logo" width="320" height="320" decoding="async" fetchpriority="high" />
         <div class="brand-text">
           <span class="brand-kicker">Ejército Argentino</span>
         </div>
@@ -115,7 +118,10 @@
 
         <div class="hero-visual-panel reveal">
           <div class="hero-main-image">
-            <img src="assets/hero-main.jpg" alt="Imagen principal de la carrera Héroes de Malvinas" />
+            <picture>
+              <source media="(max-width: 720px)" srcset="assets/hero-main.jpg" />
+              <img src="assets/hero-main.jpg" srcset="assets/hero-main.jpg 1600w" sizes="(max-width: 920px) 100vw, 48vw" alt="Imagen principal de la carrera Héroes de Malvinas" width="1600" height="800" decoding="async" fetchpriority="high" />
+            </picture>
             <div class="hero-main-image-overlay">
               <span class="visual-tag">17 · Mayo · 2026</span>
               <h2>San Rafael, Mendoza</h2>
@@ -693,7 +699,7 @@
           <p class="sponsor-tier-label">Organiza</p>
           <p class="sponsor-tier-text">Ejército Argentino</p>
           <div class="sponsor-main-logo">
-            <img src="assets/logo-principal.png" alt="Ejército Argentino — Organizador principal" />
+            <img src="assets/logo-principal.png" alt="Ejército Argentino — Organizador principal" width="320" height="320" loading="lazy" decoding="async" />
           </div>
         </div>
 
@@ -708,8 +714,6 @@
             <div class="sponsor-logo-card"><img src="assets/colabora5.png" alt="Logo colaborador 5" loading="lazy" onerror="this.style.display='none';this.parentElement.classList.add('is-empty');" /></div>
             <div class="sponsor-logo-card"><img src="assets/colabora6.png" alt="Logo colaborador 6" loading="lazy" onerror="this.style.display='none';this.parentElement.classList.add('is-empty');" /></div>
             <div class="sponsor-logo-card"><img src="assets/colabora7.png" alt="Logo colaborador 7" loading="lazy" onerror="this.style.display='none';this.parentElement.classList.add('is-empty');" /></div>
-            <div class="sponsor-logo-card"><img src="assets/colabora8.png" alt="Logo colaborador 8" loading="lazy" onerror="this.style.display='none';this.parentElement.classList.add('is-empty');" /></div>
-            <div class="sponsor-logo-card"><img src="assets/colabora9.png" alt="Logo colaborador 9" loading="lazy" onerror="this.style.display='none';this.parentElement.classList.add('is-empty');" /></div>
           </div>
         </div>
 
@@ -724,6 +728,10 @@
             <div class="sponsor-logo-card sponsor-card-animated"><img src="assets/sponsor6.png" alt="Sponsor oficial 6" loading="lazy" onerror="this.style.display='none';this.parentElement.classList.add('is-empty');" /></div>
             <div class="sponsor-logo-card sponsor-card-animated"><img src="assets/sponsor7.png" alt="Sponsor oficial 7" loading="lazy" onerror="this.style.display='none';this.parentElement.classList.add('is-empty');" /></div>
             <div class="sponsor-logo-card sponsor-card-animated"><img src="assets/sponsor8.png" alt="Sponsor oficial 8" loading="lazy" onerror="this.style.display='none';this.parentElement.classList.add('is-empty');" /></div>
+            <div class="sponsor-logo-card sponsor-card-animated"><img src="assets/sponsor9.png" alt="Sponsor oficial 9" loading="lazy" onerror="this.style.display='none';this.parentElement.classList.add('is-empty');" /></div>
+            <div class="sponsor-logo-card sponsor-card-animated"><img src="assets/sponsor10.png" alt="Sponsor oficial 10" loading="lazy" onerror="this.style.display='none';this.parentElement.classList.add('is-empty');" /></div>
+            <div class="sponsor-logo-card sponsor-card-animated"><img src="assets/sponsor11.png" alt="Sponsor oficial 11" loading="lazy" onerror="this.style.display='none';this.parentElement.classList.add('is-empty');" /></div>
+            <div class="sponsor-logo-card sponsor-card-animated"><img src="assets/sponsor12.png" alt="Sponsor oficial 12" loading="lazy" onerror="this.style.display='none';this.parentElement.classList.add('is-empty');" /></div>
           </div>
         </div>
 
@@ -839,8 +847,6 @@
     <span class="floating-whatsapp-label">WhatsApp</span>
   </a>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-  <script src="script.js"></script>
+  <script src="script.js" defer></script>
 </body>
 </html>
