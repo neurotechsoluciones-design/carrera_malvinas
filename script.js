@@ -99,8 +99,7 @@ const routes = {
     color: "#4dbdf5",
     coords: null, elevation: null,
     distance: "1.0 km", elevUp: "s/d", elevDown: "s/d",
-    supportThresholdKm: 0.12,
-    fallbackElevation: genElevation(12, 692, 8)
+    supportThresholdKm: 0.12
   },
   "5k": {
     title: "Recorrido 5K",
@@ -112,8 +111,7 @@ const routes = {
     color: "#74d2ff",
     coords: null, elevation: null,
     distance: "5.0 km", elevUp: "s/d", elevDown: "s/d",
-    supportThresholdKm: 0.12,
-    fallbackElevation: genElevation(20, 691, 14)
+    supportThresholdKm: 0.12
   },
   "10k": {
     title: "Recorrido 10K",
@@ -125,8 +123,7 @@ const routes = {
     color: "#c9efff",
     coords: null, elevation: null,
     distance: "10.0 km", elevUp: "s/d", elevDown: "s/d",
-    supportThresholdKm: 0.12,
-    fallbackElevation: genElevation(28, 690, 22)
+    supportThresholdKm: 0.12
   }
 };
 
@@ -213,8 +210,8 @@ async function fetchAndParseGpx(key) {
     route.coords = data.coords;
     route.elevation = data.elevation;
     route.distance = `${data.totalKm.toFixed(2)} km`;
-    route.elevUp   = data.elevUp > 0 ? `+${Math.round(data.elevUp)} m` : "—";
-    route.elevDown = data.elevDown > 0 ? `−${Math.round(data.elevDown)} m` : "—";
+    route.elevUp   = data.elevation && data.elevation.length > 1 && data.elevUp > 0 ? `+${Math.round(data.elevUp)} m` : "s/d";
+    route.elevDown = data.elevation && data.elevation.length > 1 && data.elevDown > 0 ? `−${Math.round(data.elevDown)} m` : "s/d";
     return true;
   } catch (err) {
     console.warn(`GPX ${key}: ${err.message}`);
@@ -470,9 +467,18 @@ function updateElevationChart(route) {
 
   const elevData = (route.elevation && route.elevation.length > 1)
     ? route.elevation
-    : route.fallbackElevation;
+    : null;
 
-  if (!elevData) return;
+  if (!elevData) {
+    const existing = canvas.parentElement.querySelector(".elev-no-data");
+    if (!existing) {
+      const empty = document.createElement("div");
+      empty.className = "elev-no-data";
+      empty.textContent = "El GPX no incluye datos reales de elevación.";
+      canvas.parentElement.appendChild(empty);
+    }
+    return;
+  }
 
   const prev = canvas.parentElement.querySelector(".elev-no-data");
   if (prev) prev.remove();
