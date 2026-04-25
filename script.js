@@ -88,6 +88,99 @@ function genElevation(points, baseAlt, variance) {
   });
 }
 
+function fillMissingElevation(values) {
+  const filled = values.slice();
+  let lastValid = null;
+
+  for (let i = 0; i < filled.length; i++) {
+    if (Number.isFinite(filled[i])) lastValid = filled[i];
+    else if (lastValid !== null) filled[i] = lastValid;
+  }
+
+  let nextValid = null;
+  for (let i = filled.length - 1; i >= 0; i--) {
+    if (Number.isFinite(filled[i])) nextValid = filled[i];
+    else if (nextValid !== null) filled[i] = nextValid;
+  }
+
+  return filled.filter(Number.isFinite);
+}
+
+function smoothSeries(values, radius = 3) {
+  return values.map((_, index) => {
+    let total = 0;
+    let count = 0;
+    for (let i = Math.max(0, index - radius); i <= Math.min(values.length - 1, index + radius); i++) {
+      total += values[i];
+      count++;
+    }
+    return count ? total / count : values[index];
+  });
+}
+
+function buildCumulativeDistances(coords) {
+  const cumulative = [0];
+  for (let i = 1; i < coords.length; i++) {
+    cumulative.push(cumulative[i - 1] + haversine(coords[i - 1], coords[i]) * 1000);
+  }
+  return cumulative;
+}
+
+function resampleElevationByDistance(coords, values, stepMeters = 25) {
+  if (!coords.length || coords.length !== values.length) return values.slice();
+  const cumulative = buildCumulativeDistances(coords);
+  const totalMeters = cumulative[cumulative.length - 1];
+  if (!Number.isFinite(totalMeters) || totalMeters <= 0) return values.slice();
+
+  const samples = [];
+  let segmentIndex = 1;
+
+  for (let target = 0; target <= totalMeters; target += stepMeters) {
+    while (segmentIndex < cumulative.length && cumulative[segmentIndex] < target) segmentIndex++;
+
+    if (segmentIndex >= cumulative.length) {
+      samples.push(values[values.length - 1]);
+      continue;
+    }
+
+    const prevIndex = Math.max(0, segmentIndex - 1);
+    const prevDist = cumulative[prevIndex];
+    const nextDist = cumulative[segmentIndex];
+    const span = nextDist - prevDist;
+    const ratio = span > 0 ? (target - prevDist) / span : 0;
+    const prevVal = values[prevIndex];
+    const nextVal = values[segmentIndex];
+    samples.push(prevVal + (nextVal - prevVal) * ratio);
+  }
+
+  if (samples[samples.length - 1] !== values[values.length - 1]) {
+    samples.push(values[values.length - 1]);
+  }
+
+  return samples;
+}
+
+function calculateElevationStats(values, minDelta = 1.5) {
+  let elevUp = 0;
+  let elevDown = 0;
+  let baseline = values[0];
+
+  for (let i = 1; i < values.length; i++) {
+    const current = values[i];
+    const diff = current - baseline;
+
+    if (diff >= minDelta) {
+      elevUp += diff;
+      baseline = current;
+    } else if (diff <= -minDelta) {
+      elevDown += Math.abs(diff);
+      baseline = current;
+    }
+  }
+
+  return { elevUp, elevDown };
+}
+
 const routes = {
   "1k": {
     title: "Recorrido 1K",
@@ -148,18 +241,22 @@ function parseGpx(xmlText) {
       || pt.querySelector("ele");
     return e ? parseFloat(e.textContent) : null;
   });
-  const hasRealEle = elevEls.some(e => e !== null && e !== 0);
-  const elevation = hasRealEle ? elevEls.filter(e => e !== null) : null;
+  const validElevations = elevEls.filter(Number.isFinite);
+  const elevationRange = validElevations.length ? Math.max(...validElevations) - Math.min(...validElevations) : 0;
+  const hasRealEle = validElevations.length > 1 && elevationRange > 0.5;
+  const elevation = hasRealEle ? fillMissingElevation(elevEls) : null;
 
   let totalKm = 0;
   for (let i = 1; i < coords.length; i++) totalKm += haversine(coords[i-1], coords[i]);
 
   let elevUp = 0, elevDown = 0;
   if (elevation && elevation.length > 1) {
-    for (let i = 1; i < elevation.length; i++) {
-      const d = elevation[i] - elevation[i-1];
-      if (d > 0) elevUp += d; else elevDown += Math.abs(d);
-    }
+    const smoothedElevation = smoothSeries(elevation, 3);
+    const statsProfile = resampleElevationByDistance(coords, smoothedElevation, 25);
+    const stats = calculateElevationStats(statsProfile, 1.5);
+    elevUp = stats.elevUp;
+    elevDown = stats.elevDown;
+    return { coords, elevation: smoothedElevation, totalKm, elevUp, elevDown };
   }
   return { coords, elevation, totalKm, elevUp, elevDown };
 }
