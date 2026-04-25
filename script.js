@@ -35,24 +35,6 @@ const SUPPORT_GPX = "assets/gpx/puestos-control-hidratacion.gpx";
 const LEAFLET_CSS_URL = "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css";
 const LEAFLET_JS_URL = "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js";
 const CHART_JS_URL = "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js";
-const MAP_THEMES = {
-  dark: {
-    baseUrl: "https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png",
-    overlayUrl: "https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}{r}.png",
-    options: {
-      maxZoom: 19,
-      subdomains: "abcd",
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>'
-    }
-  },
-  streets: {
-    baseUrl: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-    options: {
-      maxZoom: 19,
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-    }
-  }
-};
 
 const loadedAssets = new Map();
 
@@ -130,13 +112,7 @@ const routes = {
     color: "#74d2ff",
     coords: null, elevation: null,
     distance: "5.0 km", elevUp: "s/d", elevDown: "s/d",
-    displayDistance: "5.05 km",
-    displayElevUp: "+31.5 m",
-    displayElevDown: "−31.5 m",
-    profileMin: 707,
-    profileMax: 725,
     supportThresholdKm: 0.12,
-    customElevation: [722.5, 722.1, 722.1, 722.6, 722.8, 722.6, 721.9, 722.0, 722.8, 723.7, 724.4, 724.1, 724.1, 724.5, 725.0, 724.5, 722.5, 720.9, 720.1, 720.5, 720.7, 720.2, 719.5, 718.3, 717.2, 716.3, 716.3, 717.1, 717.4, 717.5, 716.6, 715.4, 714.7, 714.2, 714.1, 714.1, 713.9, 713.9, 714.0, 713.7, 713.1, 712.3, 711.4, 711.0, 710.8, 710.8, 710.8, 710.3, 709.6, 709.3, 709.4, 709.7, 710.0, 709.5, 708.6, 707.9, 707.3, 707.0, 707.2, 707.5, 708.1, 709.0, 709.3, 709.3, 708.8, 708.4, 708.4, 708.7, 709.2, 709.7, 710.3, 710.8, 710.9, 710.8, 710.6, 710.4, 710.7, 711.3, 712.0, 712.7, 713.2, 713.4, 713.5, 713.2, 713.4, 714.1, 715.1, 715.4, 714.9, 714.5, 713.9, 713.7, 714.0, 714.6, 715.9, 717.1, 718.1, 718.5, 719.2, 719.8, 720.5, 721.9, 723.2, 724.5, 724.4, 723.6, 722.6, 722.4, 722.9, 722.9, 723.0, 723.2, 723.7, 723.4, 722.6, 722.0, 722.3, 722.7, 722.9, 722.4],
     fallbackElevation: genElevation(20, 691, 14)
   },
   "10k": {
@@ -149,13 +125,7 @@ const routes = {
     color: "#c9efff",
     coords: null, elevation: null,
     distance: "10.0 km", elevUp: "s/d", elevDown: "s/d",
-    displayDistance: "9.89 km",
-    displayElevUp: "+57.3 m",
-    displayElevDown: "−57.3 m",
-    profileMin: 700,
-    profileMax: 725,
     supportThresholdKm: 0.12,
-    customElevation: [723.9, 725.0, 723.1, 722.5, 724.2, 723.5, 724.7, 723.6, 720.7, 722.1, 722.0, 719.2, 720.0, 718.1, 715.4, 714.6, 716.0, 715.7, 712.1, 710.5, 711.0, 710.5, 710.2, 710.8, 710.6, 708.6, 706.0, 704.9, 705.3, 706.1, 704.8, 702.9, 703.5, 703.4, 702.8, 702.8, 702.0, 702.5, 703.4, 703.6, 702.5, 700.1, 700.2, 700.7, 700.2, 700.0, 700.4, 701.0, 700.8, 700.4, 700.3, 701.6, 702.5, 703.6, 702.9, 702.2, 703.1, 704.4, 705.0, 706.2, 706.0, 704.8, 705.7, 707.6, 707.9, 707.7, 707.2, 706.7, 706.2, 706.3, 708.0, 709.5, 709.7, 708.4, 708.5, 709.8, 711.2, 712.0, 712.5, 713.3, 713.1, 713.2, 715.9, 716.9, 716.6, 717.2, 718.5, 718.9, 719.2, 719.4, 718.3, 718.0, 718.0, 716.2, 715.8, 716.2, 715.4, 714.0, 713.8, 714.9, 715.5, 714.5, 713.9, 713.8, 715.5, 717.9, 718.6, 719.8, 720.8, 722.3, 724.4, 722.9, 722.4, 723.0, 723.3, 725.0, 723.5, 722.5, 724.0, 723.7],
     fallbackElevation: genElevation(28, 690, 22)
   }
 };
@@ -241,18 +211,18 @@ async function fetchAndParseGpx(key) {
     const data = parseGpx(await res.text());
     if (!data || data.coords.length < 2) throw new Error("Sin puntos válidos");
     route.coords = data.coords;
-    route.elevation = route.customElevation ? route.customElevation.slice() : data.elevation;
-    route.distance = route.displayDistance || (data.totalKm.toFixed(1) + " km");
-    route.elevUp   = route.displayElevUp || (data.elevUp > 0 ? `+${Math.round(data.elevUp)} m` : "—");
-    route.elevDown = route.displayElevDown || (data.elevDown > 0 ? `−${Math.round(data.elevDown)} m` : "—");
+    route.elevation = data.elevation;
+    route.distance = `${data.totalKm.toFixed(2)} km`;
+    route.elevUp   = data.elevUp > 0 ? `+${Math.round(data.elevUp)} m` : "—";
+    route.elevDown = data.elevDown > 0 ? `−${Math.round(data.elevDown)} m` : "—";
     return true;
   } catch (err) {
     console.warn(`GPX ${key}: ${err.message}`);
     route.coords = [];
-    route.elevation = route.customElevation ? route.customElevation.slice() : null;
-    route.distance = route.displayDistance || route.nominalDistance || "GPX no disponible";
-    route.elevUp = route.displayElevUp || "s/d";
-    route.elevDown = route.displayElevDown || "s/d";
+    route.elevation = null;
+    route.distance = route.nominalDistance || "GPX no disponible";
+    route.elevUp = "s/d";
+    route.elevDown = "s/d";
     return false;
   }
 }
@@ -273,9 +243,6 @@ async function fetchSupportPoints() {
 /* ─── 3. MAPA LEAFLET ─── */
 let map = null, currentPolyline = null, currentMarkers = [], currentModalMarkers = [], animationFrame = null;
 let elevationChart = null, activeRouteKey = "1k", routeLoadToken = 0;
-let activeMapTheme = "dark";
-const mapLayerState = { base: null, overlay: null };
-const modalLayerState = { base: null, overlay: null };
 
 function clearMapMarkers(targetMap, markers) {
   if (!targetMap || !markers.length) return;
@@ -283,41 +250,14 @@ function clearMapMarkers(targetMap, markers) {
   markers.length = 0;
 }
 
-function applyMapTheme(targetMap, layerState, themeKey) {
-  if (!targetMap || typeof L === "undefined") return;
-  const theme = MAP_THEMES[themeKey] || MAP_THEMES.dark;
-
-  if (layerState.base) {
-    targetMap.removeLayer(layerState.base);
-    layerState.base = null;
-  }
-
-  if (layerState.overlay) {
-    targetMap.removeLayer(layerState.overlay);
-    layerState.overlay = null;
-  }
-
-  layerState.base = L.tileLayer(theme.baseUrl, theme.options).addTo(targetMap);
-
-  if (theme.overlayUrl) {
-    layerState.overlay = L.tileLayer(theme.overlayUrl, {
-      ...theme.options,
-      pane: "overlayPane"
-    }).addTo(targetMap);
-  }
-}
-
-function syncMapThemeButtons(themeKey) {
-  document.querySelectorAll(".map-theme-btn").forEach(btn => {
-    btn.classList.toggle("active", btn.dataset.mapTheme === themeKey);
-  });
-}
-
 function initMap() {
   const mapEl = document.getElementById("routeMap");
   if (!mapEl || typeof L === "undefined") return;
   map = L.map("routeMap", { center: CENTER, zoom: 14, zoomControl: true, scrollWheelZoom: false });
-  applyMapTheme(map, mapLayerState, activeMapTheme);
+  L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
+    maxZoom: 19, subdomains: "abcd",
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>'
+  }).addTo(map);
   loadRoute(activeRouteKey || "1k");
 }
 
@@ -528,11 +468,9 @@ function updateElevationChart(route) {
     elevationChart = null;
   }
 
-  const elevData = (route.customElevation && route.customElevation.length > 1)
-    ? route.customElevation
-    : (route.elevation && route.elevation.length > 1)
-      ? route.elevation
-      : route.fallbackElevation;
+  const elevData = (route.elevation && route.elevation.length > 1)
+    ? route.elevation
+    : route.fallbackElevation;
 
   if (!elevData) return;
 
@@ -542,6 +480,8 @@ function updateElevationChart(route) {
   const step = Math.max(1, Math.floor(elevData.length / 40));
   const sampled = elevData.filter((_, i) => i % step === 0);
   const distStr = parseFloat(route.distance) || 0;
+  const minY = Math.floor(Math.min(...elevData) - 2);
+  const maxY = Math.ceil(Math.max(...elevData) + 2);
 
   const labels = sampled.map((_, i) => {
     if (i === 0) return "Inicio";
@@ -597,8 +537,8 @@ function updateElevationChart(route) {
           ticks: { color: "#7e8da3", font: { size: 10 }, maxTicksLimit: 6 }
         },
         y: {
-          min: typeof route.profileMin === "number" ? route.profileMin : undefined,
-          max: typeof route.profileMax === "number" ? route.profileMax : undefined,
+          min: Number.isFinite(minY) ? minY : undefined,
+          max: Number.isFinite(maxY) ? maxY : undefined,
           grid: { color: "rgba(255,255,255,0.04)" },
           ticks: { color: "#7e8da3", font: { size: 10 }, callback: v => `${v}m` }
         }
@@ -609,7 +549,6 @@ function updateElevationChart(route) {
 
 /* ─── 5. TABS DE RECORRIDO ─── */
 const routeTabs = document.querySelectorAll(".route-tab");
-const mapThemeButtons = document.querySelectorAll(".map-theme-btn");
 const routeTitle       = document.getElementById("routeTitle");
 const routeDescription = document.getElementById("routeDescription");
 const routeSurface     = document.getElementById("routeSurface");
@@ -635,34 +574,16 @@ function updateRouteInfo(key) {
   }
 }
 
-function syncActiveRouteTabs(key) {
-  routeTabs.forEach(tab => {
-    tab.classList.toggle("active", tab.dataset.route === key);
-  });
-}
-
 updateRouteInfo("1k");
-syncActiveRouteTabs("1k");
-syncMapThemeButtons(activeMapTheme);
 
 routeTabs.forEach(tab => {
   tab.addEventListener("click", function() {
     const key = this.dataset.route;
     activeRouteKey = key;
-    syncActiveRouteTabs(key);
+    routeTabs.forEach(t => t.classList.remove("active"));
+    this.classList.add("active");
     updateRouteInfo(key);
     loadRoute(key);
-  });
-});
-
-mapThemeButtons.forEach(btn => {
-  btn.addEventListener("click", () => {
-    const themeKey = btn.dataset.mapTheme;
-    if (!themeKey || themeKey === activeMapTheme) return;
-    activeMapTheme = themeKey;
-    syncMapThemeButtons(themeKey);
-    if (map) applyMapTheme(map, mapLayerState, themeKey);
-    if (modalMap) applyMapTheme(modalMap, modalLayerState, themeKey);
   });
 });
 
@@ -681,7 +602,11 @@ function openMapModal() {
   setTimeout(async () => {
     if (!modalMap) {
       modalMap = L.map("mapModalContainer", { center: CENTER, zoom: 14, zoomControl: true, scrollWheelZoom: true });
-      applyMapTheme(modalMap, modalLayerState, activeMapTheme);
+      L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
+        maxZoom: 19,
+        subdomains: "abcd",
+        attribution: '&copy; OpenStreetMap contributors &copy; CARTO'
+      }).addTo(modalMap);
     }
 
     const route = routes[activeRouteKey];
@@ -884,24 +809,69 @@ document.head.appendChild(style);
 /* v5.0 | Interacciones avanzadas */
 (function () {
   const reduced = prefersReducedMotion;
-  const priceTargets = Array.from(document.querySelectorAll(".dcg-price, .pricing-price, .quick-stat-value"));
+  const heroSection = document.querySelector(".hero-section");
 
-  if (priceTargets.length) {
+  function formatARS(value) {
+    try {
+      return "$" + new Intl.NumberFormat("es-AR").format(Math.round(value));
+    } catch (e) {
+      return "$" + String(Math.round(value)).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
+  }
+
+  function getNumericValue(text) {
+    if (!text) return null;
+    const cleaned = text.replace(/[^\d]/g, "");
+    return cleaned ? parseInt(cleaned, 10) : null;
+  }
+
+  const counterTargets = Array.from(document.querySelectorAll(".dcg-price, .pricing-price, .quick-stat-value"))
+    .filter(el => /^\$\s?[\d\.]+/.test((el.textContent || "").trim()));
+
+  if (counterTargets.length) {
+    const animateCount = el => {
+      if (el.dataset.countDone === "true") return;
+      const target = getNumericValue(el.textContent);
+      if (!target) return;
+
+      const duration = 1400;
+      const start = performance.now();
+      const easeOutQuart = t => 1 - Math.pow(1 - t, 4);
+
+      const frame = now => {
+        const progress = Math.min(1, (now - start) / duration);
+        const value = target * easeOutQuart(progress);
+        el.textContent = formatARS(value);
+
+        if (progress < 1) {
+          requestAnimationFrame(frame);
+        } else {
+          el.textContent = formatARS(target);
+          el.dataset.countDone = "true";
+        }
+      };
+
+      requestAnimationFrame(frame);
+    };
+
     if (reduced) {
-      priceTargets.forEach(el => el.classList.add("is-emphasized"));
+      counterTargets.forEach(el => {
+        const value = getNumericValue(el.textContent);
+        if (value) el.textContent = formatARS(value);
+      });
     } else if ("IntersectionObserver" in window) {
-      const priceObserver = new IntersectionObserver((entries, obs) => {
+      const counterObserver = new IntersectionObserver((entries, obs) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
-            entry.target.classList.add("is-emphasized");
+            animateCount(entry.target);
             obs.unobserve(entry.target);
           }
         });
-      }, { threshold: 0.45 });
+      }, { threshold: 0.5 });
 
-      priceTargets.forEach(el => priceObserver.observe(el));
+      counterTargets.forEach(el => counterObserver.observe(el));
     } else {
-      priceTargets.forEach(el => el.classList.add("is-emphasized"));
+      counterTargets.forEach(animateCount);
     }
   }
 
